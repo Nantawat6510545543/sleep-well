@@ -1,0 +1,7 @@
+Django
+Pillow
+python-decouple
+djangorestframework
+selenium
+mysqlclient
+textblob

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sleep and Environment Dashboard</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+          rel="stylesheet">
+</head>
+
+<body>
+<div class="container mt-5">
+    <h1 class="text-center mb-4">Sleep and Environment Dashboard</h1>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Sleep Records</h5>
+                    <p class="card-text">View information about sleep
+                        records.</p>
+                    <form action="/info/sleep/" method="GET">
+                        <div class="form-group">
+                            <label for="personIdInput">Enter Sleep ID:</label>
+                            <input type="text" class="form-control"
+                                   id="sleepIdInput" name="sleep_id">
+                        </div>
+                        <button type="submit" class="btn btn-primary">View
+                            Sleep Information
+                        </button>
+                    </form>
+                    <p></p>
+                    <a href="/info/sleep/" class="btn btn-secondary">View All
+                        Sleep</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Person Information</h5>
+                    <p class="card-text">View information about persons.</p>
+                    <form action="/info/person/" method="GET">
+                        <div class="form-group">
+                            <label for="personIdInput">Enter Person ID:</label>
+                            <input type="text" class="form-control"
+                                   id="personIdInput" name="person_id">
+                        </div>
+                        <button type="submit" class="btn btn-primary">View
+                            Person Information
+                        </button>
+                    </form>
+                    <p></p>
+                    <a href="/info/person/" class="btn btn-secondary">View All
+                        Persons</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">More Endpoints </h5>
+                    <h6>Endpoint: /info/sleep/person/{person_id}</h6>
+                    <p>Description: Get information about sleep records for a
+                        specific person.</p>
+                    <hr>
+                    <h6>Endpoint: /avgScore/sleep/{person_id}</h6>
+                    <p>Description: Get average sleep score by person ID.</p>
+                    <hr>
+                    <h6>Endpoint: /avgEnvironment/{person_id}</h6>
+                    <p>Description: Get average environment score by person
+                        ID.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Visualization</h5>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap JS and dependencies -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+
+</html>
