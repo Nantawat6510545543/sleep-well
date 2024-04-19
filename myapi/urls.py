@@ -3,6 +3,9 @@ from . import views
 
 urlpatterns = [
     path('', views.index, name='index'),
+    path('visualize/gender/', views.GenderCountView.as_view(),
+         name='gender-count'),
+
     path('info/sleep/', views.SleepInfoListView.as_view(),
          name='sleep-info-list'),
     path('info/sleep/<int:sleep_id>/', views.SleepInfoByIdView.as_view(),
@@ -13,8 +16,7 @@ urlpatterns = [
          name='person-info-list'),
     path('info/person/<int:person_id>/', views.PersonInfoView.as_view(),
          name='person-info-id'),
-    path('avgScore/sleep/<int:person_id>/',
-         views.SleepInfoAnalyticsView.as_view(), name='average-score'),
-    path('avgEnvironment/<int:person_id>/',
-         views.AverageEnvironmentView.as_view(), name='average-environment'),
+
+    path('averageSleepScore/person/<int:person_id>/',
+         views.SleepInfoAnalyticsView.as_view(), name='average-sleep-score'),
 ]

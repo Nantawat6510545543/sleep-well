@@ -1,16 +1,28 @@
 from django.db.models import Avg
+from django.views.generic import TemplateView
 from rest_framework import generics, status
 from rest_framework.response import Response
-from django.shortcuts import render, redirect
+from django.shortcuts import render
 
 from .analytics import analyze_opinions
-from .models import Sleep, Person, WeatherAPI, Noise
+from .models import Sleep, Person, Weather, NoiseStation
 from .serializers import SleepInfoSerializer, PersonInfoSerializer, \
     SleepInfoAnalyticsSerializer, AverageEnvironmentSerializer
 
 
 def index(request):
     return render(request, 'myapi/index.html')
+
+
+class GenderCountView(TemplateView):
+    template_name = 'myapi/gender_visualizer.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['male_count'] = Person.objects.filter(sex='Male').count()
+        context['female_count'] = Person.objects.filter(sex='Female').count()
+        context['other_count'] = Person.objects.filter(sex='Other').count()
+        return context
 
 
 class SleepInfoListView(generics.ListAPIView):
@@ -69,44 +81,3 @@ class SleepInfoAnalyticsView(generics.RetrieveAPIView):
         sleep_comments = Sleep.objects.filter(person_id=person_id).values_list(
             'sleep_comments', flat=True)
         return analyze_opinions(sleep_comments)
-
-
-class AverageEnvironmentView(generics.RetrieveAPIView):
-    serializer_class = AverageEnvironmentSerializer
-
-    def get_object(self):
-        person_id = self.kwargs.get('personId')
-        lat = self.request.query_params.get('lat')
-        lon = self.request.query_params.get('lon')
-
-        if person_id:
-            weather_records = WeatherAPI.objects.filter(
-                station__person_id=person_id)
-            noise_records = Noise.objects.filter(station__person_id=person_id)
-        elif lat and lon:
-            weather_records = WeatherAPI.objects.filter(station__lat=lat,
-                                                        station__lon=lon)
-            noise_records = Noise.objects.filter(station__lat=lat,
-                                                 station__lon=lon)
-        else:
-            return Response({
-                'error': 'Provide either person ID or latitude and longitude.'},
-                status=status.HTTP_400_BAD_REQUEST)
-
-        if not weather_records.exists() or not noise_records.exists():
-            return Response(
-                {'error': 'No data found for the specified criteria.'},
-                status=status.HTTP_404_NOT_FOUND)
-
-        environment_data = {
-            'noise_avg': noise_records.aggregate(Avg('noise'))[
-                             'noise__avg'] or None,
-            'temp_c_avg': weather_records.aggregate(Avg('temp_c'))[
-                              'temp_c__avg'] or None,
-            'precip_mm_avg': weather_records.aggregate(Avg('precip_mm'))[
-                                 'precip_mm__avg'] or None,
-            'humidity_avg': weather_records.aggregate(Avg('humidity'))[
-                                'humidity__avg'] or None,
-        }
-
-        return environment_data
