@@ -1,8 +1,23 @@
 from rest_framework import serializers
-from .models import Sleep, Person
+from .models import Sleep, Person, Weather, NoiseStation
+
+
+class WeatherSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Weather
+        fields = ('temp_c', 'condition_text', 'precip_mm', 'humidity')
+
+
+class NoiseStationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = NoiseStation
+        fields = ('noise',)
 
 
 class SleepInfoSerializer(serializers.ModelSerializer):
+    closest_weather = WeatherSerializer()
+    closest_noise_station = NoiseStationSerializer()
+
     class Meta:
         model = Sleep
         fields = '__all__'
@@ -23,10 +38,3 @@ class SleepInfoAnalyticsSerializer(serializers.Serializer):
     person_info = PersonInfoSerializer()
     average_score = serializers.FloatField()
     opinion_analytics = SentimentAnalyticsSerializer()
-
-
-class AverageEnvironmentSerializer(serializers.Serializer):
-    noise_avg = serializers.FloatField()
-    temp_c_avg = serializers.FloatField()
-    precip_mm_avg = serializers.FloatField()
-    humidity_avg = serializers.FloatField()

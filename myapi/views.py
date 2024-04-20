@@ -1,13 +1,13 @@
 from django.db.models import Avg
 from django.views.generic import TemplateView
-from rest_framework import generics, status
-from rest_framework.response import Response
-from django.shortcuts import render
+from rest_framework import generics
+from django.shortcuts import render, get_object_or_404
 
 from .analytics import analyze_opinions
 from .models import Sleep, Person, Weather, NoiseStation
 from .serializers import SleepInfoSerializer, PersonInfoSerializer, \
-    SleepInfoAnalyticsSerializer, AverageEnvironmentSerializer
+    SleepInfoAnalyticsSerializer
+from .utils import get_closest
 
 
 def index(request):
@@ -26,20 +26,37 @@ class GenderCountView(TemplateView):
 
 
 class SleepInfoListView(generics.ListAPIView):
-    queryset = Sleep.objects.all()
     serializer_class = SleepInfoSerializer
 
+    def get_queryset(self):
+        sleeps = Sleep.objects.all()
 
-class SleepInfoView(generics.RetrieveAPIView):
-    queryset = Sleep.objects.all()
+        for sleep in sleeps:
+            sleep.closest_weather = get_closest(sleep, Weather)
+            sleep.closest_noise_station = get_closest(sleep, NoiseStation)
+
+        return sleeps
+
+
+class SleepInfoByPersonView(generics.ListAPIView):
     serializer_class = SleepInfoSerializer
-    lookup_field = 'person_id'
+
+    def get_queryset(self):
+        sleeps = Sleep.objects.filter(person_id=self.kwargs['person_id'])
+        for sleep in sleeps:
+            sleep.closest_weather = get_closest(sleep, Weather)
+            sleep.closest_noise_station = get_closest(sleep, NoiseStation)
+        return sleeps
 
 
 class SleepInfoByIdView(generics.RetrieveAPIView):
-    queryset = Sleep.objects.all()
     serializer_class = SleepInfoSerializer
-    lookup_field = 'sleep_id'
+
+    def get_object(self):
+        sleep = get_object_or_404(Sleep, sleep_id=self.kwargs['sleep_id'])
+        sleep.closest_weather = get_closest(sleep, Weather)
+        sleep.closest_noise_station = get_closest(sleep, NoiseStation)
+        return sleep
 
 
 class PersonInfoListView(generics.ListAPIView):
@@ -47,9 +64,7 @@ class PersonInfoListView(generics.ListAPIView):
     serializer_class = PersonInfoSerializer
 
 
-class PersonInfoView(generics.RetrieveAPIView):
-    queryset = Person.objects.all()
-    serializer_class = PersonInfoSerializer
+class PersonInfoView(PersonInfoListView):
     lookup_field = 'person_id'
 
 
@@ -58,26 +73,19 @@ class SleepInfoAnalyticsView(generics.RetrieveAPIView):
 
     def get_object(self):
         person_id = self.kwargs['person_id']
-        average_score = self.calculate_average_score(person_id)
         person_info = self.get_person_info(person_id)
-        opinion_analytics = self.get_analytics(person_id)
+
+        sleep = Sleep.objects.filter(person_id=person_id)
+        average_score = sleep.aggregate(Avg('sleep_score'))['sleep_score__avg']
+        sleep_comments = sleep.values_list('sleep_comments', flat=True)
+        opinion_analytics = analyze_opinions(sleep_comments)
 
         return {'person_info': person_info, 'average_score': average_score,
                 'opinion_analytics': opinion_analytics}
 
-    def calculate_average_score(self, person_id):
-        average_score = Sleep.objects.filter(person_id=person_id).aggregate(
-            Avg('sleep_score'))['sleep_score__avg']
-        return average_score
-
     def get_person_info(self, person_id):
-        person = Person.objects.filter(person_id=person_id).first()
+        person = Person.objects.filter(person_id=person_id)
         if person:
             serializer = PersonInfoSerializer(person)
             return serializer.data
         return {}
-
-    def get_analytics(self, person_id):
-        sleep_comments = Sleep.objects.filter(person_id=person_id).values_list(
-            'sleep_comments', flat=True)
-        return analyze_opinions(sleep_comments)

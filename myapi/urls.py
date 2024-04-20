@@ -10,7 +10,7 @@ urlpatterns = [
          name='sleep-info-list'),
     path('info/sleep/<int:sleep_id>/', views.SleepInfoByIdView.as_view(),
          name='sleep-info-id'),
-    path('info/sleep/person/<int:person_id>/', views.SleepInfoView.as_view(),
+    path('info/sleep/person/<int:person_id>/', views.SleepInfoByPersonView.as_view(),
          name='sleep-info-person'),
     path('info/person/', views.PersonInfoListView.as_view(),
          name='person-info-list'),
