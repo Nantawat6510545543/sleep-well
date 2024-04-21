@@ -16,12 +16,12 @@ class Sleep(models.Model):
     lat = models.FloatField()
     lon = models.FloatField()
     sleep_duration = models.IntegerField()
-    sleep_comments = models.CharField(max_length=255, default="No comments")
+    sleep_comment = models.CharField(max_length=255, default="No comments")
     sleep_score = models.IntegerField()
 
 
 class Weather(models.Model):
-    weather_api_id = models.AutoField(primary_key=True)
+    weather_id = models.AutoField(primary_key=True)
     lat = models.FloatField()
     lon = models.FloatField()
     timestamp = models.DateTimeField()
@@ -29,15 +29,19 @@ class Weather(models.Model):
     condition_text = models.CharField(max_length=100)
     precip_mm = models.FloatField()
     humidity = models.IntegerField()
+    location_name = models.CharField(max_length=100, default="Nonthaburi")
+    region = models.CharField(max_length=100, default="Nonthaburi")
+    country = models.CharField(max_length=100, default="Thailand")
+    tz_id = models.CharField(max_length=50, default="Asia/Bangkok")
 
 
-class NoiseStation(models.Model):
-    station_id = models.AutoField(primary_key=True)
-    lat = models.FloatField()
-    lon = models.FloatField()
+class Noise(models.Model):
+    noise_id = models.AutoField(primary_key=True)
+    lat = models.FloatField(default=13.857139052152801)
+    lon = models.FloatField(default=100.48867194387923)
     timestamp = models.DateTimeField()
     noise = models.FloatField()
-    location_name = models.CharField(max_length=100)
-    region = models.CharField(max_length=100)
-    country = models.CharField(max_length=100)
-    tz_id = models.CharField(max_length=50)
+    location_name = models.CharField(max_length=100, default="Nonthaburi")
+    region = models.CharField(max_length=100, default="Nonthaburi")
+    country = models.CharField(max_length=100, default="Thailand")
+    tz_id = models.CharField(max_length=50, default="Asia/Bangkok")
