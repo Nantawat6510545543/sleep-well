@@ -15,23 +15,41 @@ def haversine(lat1, lon1, lat2, lon2):
     return distance
 
 
-def get_closest(sleep, models):
+# def get_closest(sleep, models):
+#     closest = None
+#     closest_dist = float('inf')
+#
+#     models_within_5km = models.objects.filter(
+#         lat__lte=sleep.lat + 0.05,
+#         lat__gte=sleep.lat - 0.05,
+#         lon__lte=sleep.lon + 0.05,
+#         lon__gte=sleep.lon - 0.05,
+#         timestamp__gte=sleep.sleep_time - timedelta(hours=24),
+#         timestamp__lte=sleep.sleep_time + timedelta(hours=24),
+#     )
+#
+#     for model in models_within_5km:
+#         dist = haversine(sleep.lat, sleep.lon, model.lat, model.lon)
+#         if dist < closest_dist:
+#             closest = model
+#             closest_dist = dist
+#
+#     return closest
+
+def get_closest(sleep, stations):
     closest = None
     closest_dist = float('inf')
+    max_time_difference = timedelta(hours=12)
 
-    models_within_5km = models.objects.filter(
-        lat__lte=sleep.lat + 0.05,
-        lat__gte=sleep.lat - 0.05,
-        lon__lte=sleep.lon + 0.05,
-        lon__gte=sleep.lon - 0.05,
-        timestamp__gte=sleep.sleep_time - timedelta(hours=24),
-        timestamp__lte=sleep.sleep_time + timedelta(hours=24),
-    )
+    for station in stations.objects.all():
+        distance = haversine(sleep.lat, sleep.lon, station.lat, station.lon)
 
-    for model in models_within_5km:
-        dist = haversine(sleep.lat, sleep.lon, model.lat, model.lon)
-        if dist < closest_dist:
-            closest = model
-            closest_dist = dist
+        time_difference = abs(station.timestamp - sleep.sleep_time)
+        within_time_limit = time_difference <= max_time_difference
+
+        if distance <= 5 and within_time_limit:
+            if distance < closest_dist:
+                closest = station
+                closest_dist = distance
 
     return closest

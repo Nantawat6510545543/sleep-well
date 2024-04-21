@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Sleep, Person, Weather, NoiseStation
+from .models import Sleep, Person, Weather, Noise
 
 
 class WeatherSerializer(serializers.ModelSerializer):
@@ -10,7 +10,7 @@ class WeatherSerializer(serializers.ModelSerializer):
 
 class NoiseStationSerializer(serializers.ModelSerializer):
     class Meta:
-        model = NoiseStation
+        model = Noise
         fields = ('noise',)
 
 

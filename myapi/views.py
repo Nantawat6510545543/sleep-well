@@ -4,7 +4,7 @@ from rest_framework import generics
 from django.shortcuts import render, get_object_or_404
 
 from .analytics import analyze_opinions
-from .models import Sleep, Person, Weather, NoiseStation
+from .models import Sleep, Person, Weather, Noise
 from .serializers import SleepInfoSerializer, PersonInfoSerializer, \
     SleepInfoAnalyticsSerializer
 from .utils import get_closest
@@ -33,7 +33,7 @@ class SleepInfoListView(generics.ListAPIView):
 
         for sleep in sleeps:
             sleep.closest_weather = get_closest(sleep, Weather)
-            sleep.closest_noise_station = get_closest(sleep, NoiseStation)
+            sleep.closest_noise_station = get_closest(sleep, Noise)
 
         return sleeps
 
@@ -45,7 +45,7 @@ class SleepInfoByPersonView(generics.ListAPIView):
         sleeps = Sleep.objects.filter(person_id=self.kwargs['person_id'])
         for sleep in sleeps:
             sleep.closest_weather = get_closest(sleep, Weather)
-            sleep.closest_noise_station = get_closest(sleep, NoiseStation)
+            sleep.closest_noise_station = get_closest(sleep, Noise)
         return sleeps
 
 
@@ -55,7 +55,7 @@ class SleepInfoByIdView(generics.RetrieveAPIView):
     def get_object(self):
         sleep = get_object_or_404(Sleep, sleep_id=self.kwargs['sleep_id'])
         sleep.closest_weather = get_closest(sleep, Weather)
-        sleep.closest_noise_station = get_closest(sleep, NoiseStation)
+        sleep.closest_noise_station = get_closest(sleep, Noise)
         return sleep
 
 
