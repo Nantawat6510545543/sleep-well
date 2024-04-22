@@ -1,5 +1,8 @@
 from datetime import timedelta
 from math import radians, sin, cos, sqrt, atan2
+from typing import List
+
+from . import models
 
 
 def haversine(lat1, lon1, lat2, lon2):
@@ -15,28 +18,7 @@ def haversine(lat1, lon1, lat2, lon2):
     return distance
 
 
-# def get_closest(sleep, models):
-#     closest = None
-#     closest_dist = float('inf')
-#
-#     models_within_5km = models.objects.filter(
-#         lat__lte=sleep.lat + 0.05,
-#         lat__gte=sleep.lat - 0.05,
-#         lon__lte=sleep.lon + 0.05,
-#         lon__gte=sleep.lon - 0.05,
-#         timestamp__gte=sleep.sleep_time - timedelta(hours=24),
-#         timestamp__lte=sleep.sleep_time + timedelta(hours=24),
-#     )
-#
-#     for model in models_within_5km:
-#         dist = haversine(sleep.lat, sleep.lon, model.lat, model.lon)
-#         if dist < closest_dist:
-#             closest = model
-#             closest_dist = dist
-#
-#     return closest
-
-def get_closest(sleep, stations):
+def get_closest(sleep: models.Sleep, stations: models):
     closest = None
     closest_dist = float('inf')
     max_time_difference = timedelta(hours=12)
@@ -53,3 +35,30 @@ def get_closest(sleep, stations):
                 closest_dist = distance
 
     return closest
+
+
+def get_average(data: List, attribute: str):
+    valid_data = [getattr(station, attribute) for station in data if
+                  station is not None]
+    return sum(valid_data) / len(valid_data) if valid_data else None
+
+
+def get_environments(sleeps):
+    closest_weather_list = [get_closest(sleep, models.Weather) for sleep in
+                            sleeps]
+    closest_noise_station_list = [get_closest(sleep, models.Noise) for sleep in
+                                  sleeps]
+
+    avg_temp_c = get_average(closest_weather_list, "temp_c")
+    avg_precip_mm = get_average(closest_weather_list, "precip_mm")
+    avg_humidity = get_average(closest_weather_list, "humidity")
+    avg_noise = get_average(closest_noise_station_list, "noise")
+
+    context = {
+        'avg_temp_c': avg_temp_c,
+        'avg_precip_mm': avg_precip_mm,
+        'avg_humidity': avg_humidity,
+        'avg_noise': avg_noise,
+    }
+
+    return context

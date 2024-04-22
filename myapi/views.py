@@ -7,7 +7,7 @@ from .analytics import analyze_opinions
 from .models import Sleep, Person, Weather, Noise
 from .serializers import SleepInfoSerializer, PersonInfoSerializer, \
     SleepInfoAnalyticsSerializer
-from .utils import get_closest
+from .utils import get_closest, get_environments
 
 
 def index(request):
@@ -64,7 +64,9 @@ class PersonInfoListView(generics.ListAPIView):
     serializer_class = PersonInfoSerializer
 
 
-class PersonInfoView(PersonInfoListView):
+class PersonInfoView(generics.RetrieveAPIView):
+    queryset = Person.objects.all()
+    serializer_class = PersonInfoSerializer
     lookup_field = 'person_id'
 
 
@@ -72,20 +74,21 @@ class SleepInfoAnalyticsView(generics.RetrieveAPIView):
     serializer_class = SleepInfoAnalyticsSerializer
 
     def get_object(self):
-        person_id = self.kwargs['person_id']
-        person_info = self.get_person_info(person_id)
+        person_id = self.kwargs.get('person_id')
+        person_info = Person.objects.filter(person_id=person_id).first()
 
-        sleep = Sleep.objects.filter(person_id=person_id)
-        average_score = sleep.aggregate(Avg('sleep_score'))['sleep_score__avg']
-        sleep_comments = sleep.values_list('sleep_comments', flat=True)
+        sleeps = Sleep.objects.filter(person_id=person_id).select_related(
+            'person')
+        average_score = sleeps.aggregate(avg_score=Avg('sleep_score'))[
+            'avg_score']
+        sleep_comments = [sleep.sleep_comment for sleep in sleeps]
         opinion_analytics = analyze_opinions(sleep_comments)
 
-        return {'person_info': person_info, 'average_score': average_score,
-                'opinion_analytics': opinion_analytics}
+        environment = get_environments(sleeps)
 
-    def get_person_info(self, person_id):
-        person = Person.objects.filter(person_id=person_id)
-        if person:
-            serializer = PersonInfoSerializer(person)
-            return serializer.data
-        return {}
+        return {
+            'person_info': person_info,
+            'average_score': average_score,
+            'opinion_analytics': opinion_analytics,
+            'environment': environment,
+        }

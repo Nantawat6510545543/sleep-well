@@ -34,7 +34,15 @@ class SentimentAnalyticsSerializer(serializers.Serializer):
     total_comments = serializers.IntegerField()
 
 
+class EnvironmentSerializer(serializers.Serializer):
+    avg_temp_c = serializers.FloatField()
+    avg_precip_mm = serializers.FloatField()
+    avg_humidity = serializers.FloatField()
+    avg_noise = serializers.FloatField()
+
+
 class SleepInfoAnalyticsSerializer(serializers.Serializer):
     person_info = PersonInfoSerializer()
     average_score = serializers.FloatField()
     opinion_analytics = SentimentAnalyticsSerializer()
+    environment = EnvironmentSerializer()
