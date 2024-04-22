@@ -1,17 +1,13 @@
 from django.db.models import Avg
 from django.views.generic import TemplateView
 from rest_framework import generics
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import get_object_or_404
 
-from .analytics import analyze_opinions
-from .models import Sleep, Person, Weather, Noise
-from .serializers import SleepInfoSerializer, PersonInfoSerializer, \
+from myapi.analytics import analyze_opinions
+from myapi.models import Sleep, Person, Weather, Noise
+from myapi.serializers import SleepInfoSerializer, PersonInfoSerializer, \
     SleepInfoAnalyticsSerializer
-from .utils import get_closest, get_environments
-
-
-def index(request):
-    return render(request, 'myapi/index.html')
+from myapi.utils import get_closest, get_environments
 
 
 class GenderCountView(TemplateView):

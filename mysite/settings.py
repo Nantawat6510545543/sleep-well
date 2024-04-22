@@ -11,7 +11,8 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
 from pathlib import Path
-from decouple import config
+
+from .database_settings import configure_database_settings
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -73,16 +74,7 @@ WSGI_APPLICATION = 'mysite.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': config("DB_NAME", default=None),
-        'USER': config("DB_USER", default=None),
-        'PASSWORD': config("DB_PASSWD", default=None),
-        'HOST': config("DB_HOST", default=None),
-        'PORT': '',
-    }
-}
+DATABASES = configure_database_settings(BASE_DIR)
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
