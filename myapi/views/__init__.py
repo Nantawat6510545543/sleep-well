@@ -1,2 +1,2 @@
-from app_views import *
-from api_views import *
+from .app_views import *
+from .api_views import *
