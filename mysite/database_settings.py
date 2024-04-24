@@ -20,7 +20,7 @@ def configure_database_settings(BASE_DIR):
           settings for the local SQLite database.
         - If a valid user environment variable is found, it configures the database
           using the settings from the user.
-        - If user is not found or invalid, it falls back to the local SQLite database.
+        - If connection fail, it falls back to the local SQLite database.
 
     """
     local_database = {
@@ -48,14 +48,14 @@ def configure_database_settings(BASE_DIR):
                     'PORT': '',
                 }
             }
-            logging.info("Using a valid DATABASE_URL. Connecting to the Neon.")
-            print("Using a valid DATABASE_URL. Connecting to the Neon.")
+            logging.info("Using a valid DATABASE. "
+                         "Connecting to the PhpMyAdmin.")
             return cloud_database
         else:
             logging.info(
-                "DATABASE_URL not found. Falling back to the local database.")
+                "User not found. Falling back to the local database.")
     except ValueError:
         logging.warning(
-            "Invalid DATABASE_URL. Falling back to the local database.")
+            "Connection fail. Falling back to the local database.")
 
     return local_database

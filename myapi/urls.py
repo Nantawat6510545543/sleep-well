@@ -17,6 +17,9 @@ urlpatterns = [
     path('info/person/<int:person_id>/', views.PersonInfoView.as_view(),
          name='person-info-id'),
 
-    path('sleep-analytics/person/<int:person_id>/',
+    path('sleep-analytics/',
          views.SleepInfoAnalyticsView.as_view(), name='sleep-analytics'),
+    path('sleep-analytics/person/<int:person_id>/',
+         views.SleepInfoAnalyticsViewByPerson.as_view(),
+         name='sleep-analytics-person'),
 ]
