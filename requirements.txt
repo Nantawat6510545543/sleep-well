@@ -5,3 +5,4 @@ djangorestframework
 selenium
 mysqlclient
 textblob
+geopy

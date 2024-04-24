@@ -1,21 +1,8 @@
 from datetime import timedelta
-from math import radians, sin, cos, sqrt, atan2
 from typing import List
+from geopy.distance import geodesic
 
 from . import models
-
-
-def haversine(lat1, lon1, lat2, lon2):
-    # Convert latitude and longitude from degrees to radians
-    lat1, lon1, lat2, lon2 = map(radians, [lat1, lon1, lat2, lon2])
-
-    # Haversine formula
-    dlon = lon2 - lon1
-    dlat = lat2 - lat1
-    a = sin(dlat / 2) ** 2 + cos(lat1) * cos(lat2) * sin(dlon / 2) ** 2
-    c = 2 * atan2(sqrt(a), sqrt(1 - a))
-    distance = 6371 * c  # Radius of the Earth in kilometers
-    return distance
 
 
 def get_closest(sleep: models.Sleep, stations: models):
@@ -24,7 +11,8 @@ def get_closest(sleep: models.Sleep, stations: models):
     max_time_difference = timedelta(hours=12)
 
     for station in stations.objects.all():
-        distance = haversine(sleep.lat, sleep.lon, station.lat, station.lon)
+        distance = geodesic((sleep.lat, sleep.lon),
+                            (station.lat, station.lon)).km
 
         time_difference = abs(station.timestamp - sleep.sleep_time)
         within_time_limit = time_difference <= max_time_difference
@@ -37,7 +25,7 @@ def get_closest(sleep: models.Sleep, stations: models):
     return closest
 
 
-def get_average(data: List, attribute: str):
+def get_average(data: List[models], attribute: str):
     valid_data = [getattr(station, attribute) for station in data if
                   station is not None]
     return sum(valid_data) / len(valid_data) if valid_data else None
