@@ -23,6 +23,7 @@ analyze sleep comments and provide insights into sleep quality trends.
 
 3. **Filter Sleep Information by Person ID**
     - **Endpoint:** `/info/sleep/person/<int:person_id>/`
+    - **Endpoint:** `/info/person/<int:person_id>/sleep/`
     - **Method:** GET
     - **Description:** Retrieves sleep entries filtered by the person's ID.
 
@@ -46,6 +47,7 @@ analyze sleep comments and provide insights into sleep quality trends.
 
 7. **Sleep Analytics for a Specific Person**
     - **Endpoint:** `/sleep-analytics/person/<int:person_id>/`
+    - **Endpoint:** `/person/<int:person_id>/sleep-analytics/`
     - **Method:** GET
     - **Description:** Performs analytics on sleep data for a specific person,
       including average sleep score, sentiment analysis of sleep comments, and

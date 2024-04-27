@@ -62,8 +62,8 @@ class SleepInfoAnalyticsView(generics.ListAPIView):
 
         data = []
         for person in persons:
-            sleeps = Sleep.objects.filter(person_id=person.id).select_related(
-                'person')
+            sleeps = (Sleep.objects.filter(person_id=person.person_id)
+                      .select_related('person'))
             average_score = sleeps.aggregate(avg_score=Avg('sleep_score'))[
                 'avg_score']
             sleep_comments = [sleep.sleep_comment for sleep in sleeps]
