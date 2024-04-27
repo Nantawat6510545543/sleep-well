@@ -15,7 +15,7 @@ class Sleep(models.Model):
     sleep_time = models.DateTimeField()
     lat = models.FloatField()
     lon = models.FloatField()
-    sleep_duration = models.IntegerField()
+    sleep_duration = models.FloatField()
     sleep_comment = models.CharField(max_length=255, default="No comments")
     sleep_score = models.IntegerField()
 

@@ -1,7 +1,7 @@
 from django.urls import path, include
 from myapi import views
-from .info import info_patterns
-from .visualize import visualize_patterns
+from .info_urls import info_patterns
+from .visualize_urls import visualize_patterns
 
 urlpatterns = [
     path('', views.index, name='index'),

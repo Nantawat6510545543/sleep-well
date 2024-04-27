@@ -28,7 +28,7 @@ class UtilsTests(BaseTest):
         ]
 
         for sleep, station, expected_result in test_cases:
-            self.assertEqual(get_closest(sleep, station), expected_result)
+            self.assertEqual(get_closest_station(sleep, station), expected_result)
 
     def test_get_environments(self):
         temp_avg = (self.weather1.temp_c + self.weather2.temp_c) / 2

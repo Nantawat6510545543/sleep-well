@@ -1,1 +1,1 @@
-from .base import urlpatterns
+from .base_urls import urlpatterns

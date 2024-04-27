@@ -1,5 +1,7 @@
-from django.urls import path, include
-from myapi import views
+from django.urls import path, include, register_converter
+from myapi import views, converters
+
+register_converter(converters.FloatUrlParameterConverter, 'float')
 
 info_patterns = [
     path('sleep/', include([
@@ -7,6 +9,12 @@ info_patterns = [
         path('<int:sleep_id>/', views.SleepInfoByIdView.as_view(), name='sleep-info-id'),
         path('person/<int:person_id>/', views.SleepInfoByPersonView.as_view(),
              name='sleep-info-person'),
+        path("<float:lat>-<float:lon>/", views.SleepInfoByLocationView.as_view(),
+             name='sleep-info-location-within-5-km'),
+        path("<float:lat>-<float:lon>/range/<int:km>", views.SleepInfoByLocationView.as_view(),
+             name='sleep-info-location-within-range'),
+        # path("day/", views.),
+        # path("<lat>-<lon>/", views.),
     ])),
 
     path('person/', include([

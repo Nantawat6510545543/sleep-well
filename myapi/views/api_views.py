@@ -6,55 +6,88 @@ from myapi.analytics import analyze_opinions
 from myapi.models import Sleep, Person, Weather, Noise
 from myapi.serializers import SleepInfoSerializer, PersonInfoSerializer, \
     SleepInfoAnalyticsSerializer
-from myapi.utils import get_closest, get_environments
+from myapi.utils import get_closest_station, get_environments, get_sleep_within_range
+
+
+class PersonInfoListView(generics.ListAPIView):
+    """Returns a list of Person information."""
+    queryset = Person.objects.all()
+    serializer_class = PersonInfoSerializer
+
+
+class PersonInfoView(generics.RetrieveAPIView):
+    """Returns detailed information about a specific person identified by person_id."""
+    queryset = Person.objects.all()
+    serializer_class = PersonInfoSerializer
+    lookup_field = 'person_id'
 
 
 class SleepInfoListView(generics.ListAPIView):
+    """
+    Returns a list of sleep information with additional data about the closest environment for each sleep entry.
+    """
     serializer_class = SleepInfoSerializer
 
     def get_queryset(self):
         sleeps = Sleep.objects.all()
 
         for sleep in sleeps:
-            sleep.closest_weather = get_closest(sleep, Weather)
-            sleep.closest_noise_station = get_closest(sleep, Noise)
+            sleep.closest_weather = get_closest_station(sleep, Weather)
+            sleep.closest_noise_station = get_closest_station(sleep, Noise)
 
         return sleeps
 
 
 class SleepInfoByIdView(generics.RetrieveAPIView):
+    """
+    Returns detailed sleep information for a specific sleep entry identified by sleep_id, including data about the closest environment.
+    """
     serializer_class = SleepInfoSerializer
 
     def get_object(self):
         sleep = get_object_or_404(Sleep, sleep_id=self.kwargs['sleep_id'])
-        sleep.closest_weather = get_closest(sleep, Weather)
-        sleep.closest_noise_station = get_closest(sleep, Noise)
+        sleep.closest_weather = get_closest_station(sleep, Weather)
+        sleep.closest_noise_station = get_closest_station(sleep, Noise)
         return sleep
 
 
 class SleepInfoByPersonView(generics.ListAPIView):
+    """
+    Returns sleep information for all sleep entries associated with a specific person identified by person_id, including data about the closest environment for each sleep entry.
+    """
     serializer_class = SleepInfoSerializer
 
     def get_queryset(self):
         sleeps = Sleep.objects.filter(person_id=self.kwargs['person_id'])
         for sleep in sleeps:
-            sleep.closest_weather = get_closest(sleep, Weather)
-            sleep.closest_noise_station = get_closest(sleep, Noise)
+            sleep.closest_weather = get_closest_station(sleep, Weather)
+            sleep.closest_noise_station = get_closest_station(sleep, Noise)
         return sleeps
 
 
-class PersonInfoListView(generics.ListAPIView):
-    queryset = Person.objects.all()
-    serializer_class = PersonInfoSerializer
+class SleepInfoByLocationView(generics.ListAPIView):
+    """
+    Returns sleep information for all sleep entries within a certain range (default range is 5 km) of a specified location (lat and lon coordinates), including data about the closest environment for each sleep entry.
+    """
+    serializer_class = SleepInfoSerializer
 
-
-class PersonInfoView(generics.RetrieveAPIView):
-    queryset = Person.objects.all()
-    serializer_class = PersonInfoSerializer
-    lookup_field = 'person_id'
+    def get_queryset(self):
+        range_km = 5
+        lat = self.kwargs['lat']
+        lon = self.kwargs['lon']
+        if 'km' in self.kwargs:
+            range_km = self.kwargs['km']
+        sleeps = get_sleep_within_range(lat, lon, range_km)
+        for sleep in sleeps:
+            sleep.closest_weather = get_closest_station(sleep, Weather)
+            sleep.closest_noise_station = get_closest_station(sleep, Noise)
+        return sleeps
 
 
 class SleepInfoAnalyticsView(generics.ListAPIView):
+    """
+    Returns analytics data for sleep information, including average sleep scores, opinion analytics based on sleep comments, and environmental data for each person.
+    """
     serializer_class = SleepInfoAnalyticsSerializer
 
     def get_queryset(self):
@@ -81,6 +114,7 @@ class SleepInfoAnalyticsView(generics.ListAPIView):
 
 
 class SleepInfoAnalyticsViewByPerson(generics.RetrieveAPIView):
+    """Returns analytics data for sleep information related to a specific person identified by person_id, including average sleep scores, opinion analytics based on sleep comments, and environmental data."""
     serializer_class = SleepInfoAnalyticsSerializer
 
     def get_object(self):

@@ -5,7 +5,7 @@ from geopy.distance import geodesic
 from . import models
 
 
-def get_closest(sleep: models.Sleep, stations: models):
+def get_closest_station(sleep: models.Sleep, stations: models):
     closest = None
     closest_dist = float('inf')
     max_time_difference = timedelta(hours=12)
@@ -25,6 +25,18 @@ def get_closest(sleep: models.Sleep, stations: models):
     return closest
 
 
+def get_sleep_within_range(lat, lon, range_km):
+    sleeps_within_range = []
+
+    for sleep in models.Sleep.objects.all():
+        distance_km = geodesic((sleep.lat, sleep.lon), (lat, lon)).km
+
+        if distance_km <= range_km:
+            sleeps_within_range.append(sleep)
+
+    return sleeps_within_range
+
+
 def get_average(data: List[models], attribute: str):
     valid_data = [getattr(station, attribute) for station in data if
                   station is not None]
@@ -32,9 +44,9 @@ def get_average(data: List[models], attribute: str):
 
 
 def get_environments(sleeps):
-    closest_weather_list = [get_closest(sleep, models.Weather) for sleep in
+    closest_weather_list = [get_closest_station(sleep, models.Weather) for sleep in
                             sleeps]
-    closest_noise_station_list = [get_closest(sleep, models.Noise) for sleep in
+    closest_noise_station_list = [get_closest_station(sleep, models.Noise) for sleep in
                                   sleeps]
 
     avg_temp_c = get_average(closest_weather_list, "temp_c")
