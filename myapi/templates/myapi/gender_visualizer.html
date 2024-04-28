@@ -5,56 +5,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gender Visualization</title>
-    <!-- Chart.js CDN -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 
 <body>
     <div class="container mt-5">
-        <h1 class="text-center mb-4">Gender Visualization</h1>
-        <div class="row">
-            <div class="col-md-8 offset-md-2">
-                <canvas id="genderChart"></canvas>
-            </div>
-        </div>
+        {{ chart|safe }}
     </div>
-
-    <script>
-        var maleCount = {{ male_count }};
-        var femaleCount = {{ female_count }};
-        var otherCount = {{ other_count }};
-
-        var ctx = document.getElementById('genderChart').getContext('2d');
-        var genderChart = new Chart(ctx, {
-            type: 'pie',
-            data: {
-                labels: ['Male', 'Female', 'Other'],
-                datasets: [{
-                    label: 'Gender Distribution',
-                    data: [maleCount, femaleCount, otherCount],
-                    backgroundColor: [
-                        'rgba(54, 162, 235, 0.7)',
-                        'rgba(255, 99, 132, 0.7)',
-                        'rgba(75, 192, 192, 0.7)',
-                    ],
-                    borderColor: [
-                        'rgba(54, 162, 235, 1)',
-                        'rgba(255, 99, 132, 1)',
-                        'rgba(75, 192, 192, 1)',
-                    ],
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                title: {
-                    display: true,
-                    text: 'Gender Distribution'
-                }
-            }
-        });
-    </script>
 </body>
 
 </html>
