@@ -8,6 +8,9 @@ from myapi.models import Person
 def index(request):
     return render(request, 'myapi/index.html')
 
+def get_visualize_view(request):
+    return render(request, 'myapi/visualize.html')
+
 
 class GenderCountView(TemplateView):
     template_name = 'myapi/gender_visualizer.html'
