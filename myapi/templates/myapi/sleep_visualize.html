@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sleep Visualization</title>
+</head>
+
+<body>
+    # TODO add user id input
+    {% comment %} <form action="{% url 'sleep-view-with-id' %}" method="GET">
+        <input type="number" id="person_id" name="person_id" required>
+        <button type="submit">Submit</button>
+    </form> {% endcomment %}
+
+    <div class="container mt-5">
+        {{ sleep_time_chart|safe }}
+        {{ sleep_duration_chart|safe }}
+        {{ sleep_score_chart|safe }}
+    </div>
+</body>
+
+</html>

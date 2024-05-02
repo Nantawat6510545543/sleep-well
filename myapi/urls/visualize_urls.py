@@ -6,5 +6,7 @@ visualize_patterns = [
     path('gender/', app_views.GenderView.as_view(), name='gender-view'),
     path('age/', app_views.AgeView.as_view(), name='age-view'),
     path('height/', app_views.HeightView.as_view(), name='height-view'),
-    path('weight/', app_views.WeightView.as_view(), name='weight-view')
+    path('weight/', app_views.WeightView.as_view(), name='weight-view'),
+    path('sleep/', app_views.SleepView.as_view(), name='sleep-view'),
+    path('sleep/<int:person_id>', app_views.SleepView.as_view(), name='sleep-view-with-id')
 ]

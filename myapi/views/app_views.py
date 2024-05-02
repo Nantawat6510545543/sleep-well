@@ -33,3 +33,21 @@ class HeightView(BaseVisualizeView):
 
 class WeightView(BaseVisualizeView):
     strategy_class = WeightStrategy
+
+class SleepView(TemplateView):
+    template_name = 'myapi/sleep_visualize.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # print(self.request.GET.get('person_id'))
+
+        if 'person_id' in context:
+            sleep_time_chart = SleepTimeStrategy.get_chart_by_id(context['person_id'])
+            context['sleep_time_chart'] = sleep_time_chart or "Sleep Time Chart is unavailable"
+
+            sleep_duration_chart = SleepDurationStrategy.get_chart_by_id(context['person_id'])
+            context['sleep_duration_chart'] = sleep_duration_chart or "Sleep Duration Chart is unavailable"
+
+            sleep_score_chart = SleepScoreStrategy.get_chart_by_id(context['person_id'])
+            context['sleep_score_chart'] = sleep_score_chart or "Sleep Score Chart is unavailable"
+        return context
