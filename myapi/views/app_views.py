@@ -1,5 +1,5 @@
 from myapi.chart_utils import *
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from django.views.generic import TemplateView
 
 
@@ -39,7 +39,6 @@ class SleepView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        # print(self.request.GET.get('person_id'))
 
         if 'person_id' in context:
             sleep_time_chart = SleepTimeStrategy.get_chart_by_id(context['person_id'])
