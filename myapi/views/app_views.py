@@ -1,5 +1,5 @@
 from myapi.chart_utils import *
-from django.shortcuts import redirect, render
+from django.shortcuts import render
 from django.views.generic import TemplateView
 
 
