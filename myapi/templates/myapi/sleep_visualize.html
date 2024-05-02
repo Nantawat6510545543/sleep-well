@@ -8,7 +8,17 @@
 </head>
 
 <body>
-    # TODO add user id input
+    {% comment %} <form action={% url 'sleep-detail' %} method="GET">
+        Enter Person ID:
+        <input type="text" name="">
+        <button type="submit">Click</button>
+    </form> {% endcomment %}
+    <form method="POST" {% if person_id %} action="{% url 'sleep-detail' person_id=person_id %}"{% endif %}>
+        {% csrf_token %}
+        Enter Person ID:
+        <input type="text" name="person_id" required>
+        <button type="submit">Click</button>
+    </form>
     <div class="container mt-5">
         {{ sleep_time_chart|safe }}
         {{ sleep_duration_chart|safe }}
