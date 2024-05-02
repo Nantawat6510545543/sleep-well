@@ -16,8 +16,20 @@ class BaseVisualizeView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['chart'] = self.strategy_class.get_chart()
+
+        if self.strategy_class:
+            chart = self.strategy_class.get_chart()
+            context['chart'] = chart or "Chart is unavailable"
         return context
 
 class GenderView(BaseVisualizeView):
     strategy_class = GenderStrategy
+
+class AgeView(BaseVisualizeView):
+    strategy_class = AgeStrategy
+
+class HeightView(BaseVisualizeView):
+    strategy_class = HeightStrategy
+
+class WeightView(BaseVisualizeView):
+    strategy_class = WeightStrategy
