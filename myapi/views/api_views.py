@@ -1,6 +1,7 @@
 from django.db.models import Avg
-from rest_framework import generics
 from django.shortcuts import get_object_or_404
+from rest_framework import generics
+
 
 from myapi.analytics import analyze_opinions
 from myapi.models import Sleep, Person, Weather, Noise

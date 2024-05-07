@@ -5,7 +5,7 @@ register_converter(converters.FloatUrlParameterConverter, 'float')
 
 info_patterns = [
     path('sleep/', include([
-        path('', views.SleepInfoListView.as_view(), name='sleep-info-list'),
+        path('', views.get_sleep_info_list_view, name='sleep-info-list'),
         path('<int:sleep_id>/', views.SleepInfoByIdView.as_view(), name='sleep-info-id'),
         path('person/<int:person_id>/', views.SleepInfoByPersonView.as_view(),
              name='sleep-info-person'),
@@ -18,7 +18,7 @@ info_patterns = [
     ])),
 
     path('person/', include([
-        path('', views.PersonInfoListView.as_view(), name='person-info-list'),
+        path('', views.get_person_info_list_view, name='person-info-list'),
         path('<int:person_id>/', views.PersonInfoView.as_view(), name='person-info-id'),
         path('<int:person_id>/sleep/', views.SleepInfoByPersonView.as_view(),
              name='sleep-info-person'),

@@ -93,7 +93,6 @@ class WeightStrategy(VisualizeStrategy):
         chart = fig.to_html()
         return chart
 
-# TODO handle where person_id doesn't exists
 # TODO format graph position
 # TODO refactor
 # interface for type hinting/ forcing implementation
