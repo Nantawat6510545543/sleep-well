@@ -11,12 +11,12 @@
 </head>
 
 <body>
-    <form method="POST" {% if person_id %} action="{% url 'sleep-detail' person_id=person_id %}"{% endif %}>
-        {% csrf_token %}
+    <form method="GET" action="{% url 'sleep-view' %}">
         Enter Person ID:
         <input type="text" name="person_id" required>
         <button type="submit" class="btn btn-primary">Click</button>
     </form>
+
     <div class="container mt-5">
         {{ sleep_time_chart|safe }}<br>
         {{ sleep_duration_chart|safe }}<br>

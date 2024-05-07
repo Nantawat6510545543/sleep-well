@@ -1,5 +1,5 @@
-from django.shortcuts import redirect, render
-from django.views.generic import View, TemplateView
+from django.shortcuts import render
+from django.views.generic import TemplateView
 
 from myapi.chart_utils import *
 
@@ -29,7 +29,7 @@ class WeightView(BaseVisualizeView):
     strategy_class = WeightStrategy
 
 
-class SleepView(View):
+class SleepView(TemplateView):
     template_name = 'myapi/sleep_visualize.html'
 
     def get(self, request, *args, **kwargs):
@@ -51,13 +51,9 @@ class SleepView(View):
             sleep_score_chart = "Sleep Score Chart is unavailable"
 
         context = {
-            'person_id': person_id,
             'sleep_time_chart': sleep_time_chart,
             'sleep_duration_chart': sleep_duration_chart,
             'sleep_score_chart': sleep_score_chart,
         }
 
         return render(request, self.template_name, context)
-
-    def post(self, request, *args, **kwargs):
-        return redirect('sleep-detail', person_id=request.POST.get("person_id"))

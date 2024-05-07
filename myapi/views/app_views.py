@@ -25,3 +25,11 @@ def get_sleep_info_list_view(request):
         return redirect('sleep-info-id', sleep_id=sleep_id)
     else:
         return SleepInfoListView.as_view()(request)
+
+# Fix for query parameters in sleep visualize view
+def get_sleep_visualize_view(request):
+    person_id = request.GET.get('person_id')
+    if person_id:
+        return redirect('sleep-detail', person_id=person_id)
+    else:
+        return render(request, 'myapi/sleep_visualize.html')
