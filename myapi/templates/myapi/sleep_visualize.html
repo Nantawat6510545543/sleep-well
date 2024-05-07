@@ -5,24 +5,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sleep Visualization</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    rel="stylesheet">
 </head>
 
 <body>
-    {% comment %} <form action={% url 'sleep-detail' %} method="GET">
-        Enter Person ID:
-        <input type="text" name="">
-        <button type="submit">Click</button>
-    </form> {% endcomment %}
     <form method="POST" {% if person_id %} action="{% url 'sleep-detail' person_id=person_id %}"{% endif %}>
         {% csrf_token %}
         Enter Person ID:
         <input type="text" name="person_id" required>
-        <button type="submit">Click</button>
+        <button type="submit" class="btn btn-primary">Click</button>
     </form>
     <div class="container mt-5">
-        {{ sleep_time_chart|safe }}
-        {{ sleep_duration_chart|safe }}
-        {{ sleep_score_chart|safe }}
+        {{ sleep_time_chart|safe }}<br>
+        {{ sleep_duration_chart|safe }}<br>
+        {{ sleep_score_chart|safe }}<br>
     </div>
 </body>
 
