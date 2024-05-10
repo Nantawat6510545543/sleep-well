@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.db.models import Avg
 from django.shortcuts import get_object_or_404
 from rest_framework import generics
@@ -78,6 +80,26 @@ class SleepInfoByLocationView(generics.ListAPIView):
         if 'km' in self.kwargs:
             range_km = self.kwargs['km']
         sleeps = get_sleep_within_range(lat, lon, range_km)
+        for sleep in sleeps:
+            sleep.closest_weather = get_closest_station(sleep, Weather)
+            sleep.closest_noise_station = get_closest_station(sleep, Noise)
+        return sleeps
+
+
+class SleepInfoByDateView(generics.ListAPIView):
+    """
+    Returns sleep information for all sleep entries that occurred on a specific date, including data about the closest environment for each sleep entry.
+    """
+    serializer_class = SleepInfoSerializer
+
+    def get_queryset(self):
+        day = self.request.GET.get('day', 1)
+        mouth = self.request.GET.get('mouth', 4)
+        year = self.request.GET.get('year', 2024)
+
+        specific_date = datetime(year, mouth, day)
+        sleeps = Sleep.objects.filter(sleep_time__date=specific_date)
+
         for sleep in sleeps:
             sleep.closest_weather = get_closest_station(sleep, Weather)
             sleep.closest_noise_station = get_closest_station(sleep, Noise)

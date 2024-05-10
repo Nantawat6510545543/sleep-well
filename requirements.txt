@@ -9,4 +9,7 @@ geopy
 
 # If "pip install plotly.express" doesn't work,
 # try "pip install plotly.express --no-cache-dir"
-plotly.express 
+plotly.express
+plotly
+numpy
+pandas
