@@ -11,8 +11,7 @@ def get_closest_station(sleep: models.Sleep, stations: models):
     max_time_difference = timedelta(hours=12)
 
     for station in stations.objects.all():
-        distance = geodesic((sleep.lat, sleep.lon),
-                            (station.lat, station.lon)).km
+        distance = geodesic((sleep.lat, sleep.lon), (station.lat, station.lon)).km
 
         time_difference = abs(station.timestamp - sleep.sleep_time)
         within_time_limit = time_difference <= max_time_difference
@@ -38,8 +37,7 @@ def get_sleep_within_range(lat, lon, range_km):
 
 
 def get_average(data: List[models], attribute: str):
-    valid_data = [getattr(station, attribute) for station in data if
-                  station is not None]
+    valid_data = [getattr(station, attribute) for station in data if station is not None]
     return sum(valid_data) / len(valid_data) if valid_data else None
 
 

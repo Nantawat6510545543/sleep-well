@@ -16,14 +16,18 @@ class BaseVisualizeView(TemplateView):
             context['chart'] = chart or "Chart is unavailable"
         return context
 
+
 class GenderView(BaseVisualizeView):
     strategy_class = GenderStrategy
+
 
 class AgeView(BaseVisualizeView):
     strategy_class = AgeStrategy
 
+
 class HeightView(BaseVisualizeView):
     strategy_class = HeightStrategy
+
 
 class WeightView(BaseVisualizeView):
     strategy_class = WeightStrategy

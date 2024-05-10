@@ -2,7 +2,6 @@ from django.db.models import Avg
 from django.shortcuts import get_object_or_404
 from rest_framework import generics
 
-
 from myapi.analytics import analyze_opinions
 from myapi.models import Sleep, Person, Weather, Noise
 from myapi.serializers import SleepInfoSerializer, PersonInfoSerializer, \
@@ -96,10 +95,8 @@ class SleepInfoAnalyticsView(generics.ListAPIView):
 
         data = []
         for person in persons:
-            sleeps = (Sleep.objects.filter(person_id=person.person_id)
-                      .select_related('person'))
-            average_score = sleeps.aggregate(avg_score=Avg('sleep_score'))[
-                'avg_score']
+            sleeps = (Sleep.objects.filter(person_id=person.person_id).select_related('person'))
+            average_score = sleeps.aggregate(avg_score=Avg('sleep_score'))['avg_score']
             sleep_comments = [sleep.sleep_comment for sleep in sleeps]
             opinion_analytics = analyze_opinions(sleep_comments)
             environment = get_environments(sleeps)
@@ -115,17 +112,17 @@ class SleepInfoAnalyticsView(generics.ListAPIView):
 
 
 class SleepInfoAnalyticsViewByPerson(generics.RetrieveAPIView):
-    """Returns analytics data for sleep information related to a specific person identified by person_id, including average sleep scores, opinion analytics based on sleep comments, and environmental data."""
+    """
+    Returns analytics data for sleep information related to a specific person identified by person_id, including average sleep scores, opinion analytics based on sleep comments, and environmental data.
+    """
     serializer_class = SleepInfoAnalyticsSerializer
 
     def get_object(self):
         person_id = self.kwargs.get('person_id')
         person_info = Person.objects.filter(person_id=person_id).first()
 
-        sleeps = Sleep.objects.filter(person_id=person_id).select_related(
-            'person')
-        average_score = sleeps.aggregate(avg_score=Avg('sleep_score'))[
-            'avg_score']
+        sleeps = Sleep.objects.filter(person_id=person_id).select_related('person')
+        average_score = sleeps.aggregate(avg_score=Avg('sleep_score'))['avg_score']
         sleep_comments = [sleep.sleep_comment for sleep in sleeps]
         opinion_analytics = analyze_opinions(sleep_comments)
 
