@@ -117,6 +117,22 @@ class SleepAnalyticsStrategy(VisualizeStrategy):
         return chart
 
 
+class SleepDurationVSSleepScoreStrategy(VisualizeStrategy):
+    layout = {
+        "title": "Sleep Duration vs Sleep Score Visualization",
+        "xaxis_title": "Sleep Duration",
+        "yaxis_title": "Sleep Score",
+    }
+
+    def get_chart() -> str:
+        sleep_objects = Sleep.objects.all()
+        sleep_duration_list = sleep_objects.values_list('sleep_duration', flat=True)
+        sleep_score_list = sleep_objects.values_list('sleep_score', flat=True)
+        fig = px.scatter(x=sleep_duration_list, y=sleep_score_list)
+        fig.update_layout(**SleepDurationVSSleepScoreStrategy.layout)
+        fig.update_traces(name=f"Sleep  Data", showlegend=True)
+        chart = fig.to_html()
+        return chart
 
 
 # TODO refactor
