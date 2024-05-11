@@ -48,8 +48,9 @@ If you prefer a manual setup, follow the steps outlined in [manual.md](installat
 ### Documents
 
 * [Testing plan](https://github.com/Nantawat6510545543/sleep-well/wiki/Testing-plan)
-
-* [Presentation Slide]()
+* [Data Acquisition and Integration Presentation Slide]()
+* [Software Testing Presentation Slide]()
+* [Data Analytics Presentation Slide]()
 
 ### Application Architecture
 
