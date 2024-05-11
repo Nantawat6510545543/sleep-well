@@ -1,13 +1,11 @@
-from datetime import datetime
-
+from django.db.models import Q
 from django.shortcuts import get_object_or_404
 from rest_framework import generics
 
 from myapi.models import Sleep, Person, Weather, Noise
 from myapi.serializers import SleepInfoSerializer, PersonInfoSerializer, \
     SleepInfoAnalyticsSerializer
-from myapi.utils import get_analytics_data, get_closest_station, \
-    get_environments, get_sleep_within_range
+from myapi.utils import get_analytics_data, get_closest_station, get_sleep_within_range
 
 
 class PersonInfoListView(generics.ListAPIView):
@@ -87,17 +85,28 @@ class SleepInfoByLocationView(generics.ListAPIView):
 
 class SleepInfoByDateView(generics.ListAPIView):
     """
-    Returns sleep information for all sleep entries that occurred on a specific date, including data about the closest environment for each sleep entry.
+    Returns sleep information for all sleep entries that occurred on a specific date,
+    including data about the closest environment for each sleep entry.
     """
     serializer_class = SleepInfoSerializer
 
     def get_queryset(self):
-        day = self.request.GET.get('day', 1)
-        mouth = self.request.GET.get('mouth', 4)
-        year = self.request.GET.get('year', 2024)
+        sleeps = Sleep.objects.all()
+        filters = Q()
 
-        specific_date = datetime(year, mouth, day)
-        sleeps = Sleep.objects.filter(sleep_time__date=specific_date)
+        if "day" in self.request.GET:
+            day = self.request.GET.get('day')
+            filters &= Q(sleep_time__day=day)
+
+        if "month" in self.request.GET:
+            month = self.request.GET.get('month')
+            filters &= Q(sleep_time__month=month)
+        
+        if "year" in self.request.GET:
+            year = self.request.GET.get('year')
+            filters &= Q(sleep_time__year=year)
+
+        sleeps = sleeps.filter(filters)
 
         for sleep in sleeps:
             sleep.closest_weather = get_closest_station(sleep, Weather)
@@ -107,7 +116,8 @@ class SleepInfoByDateView(generics.ListAPIView):
 
 class SleepInfoAnalyticsView(generics.ListAPIView):
     """
-    Returns analytics data for sleep information, including average sleep scores, opinion analytics based on sleep comments, and environmental data for each person.
+    Returns analytics data for sleep information, including average sleep scores,
+    opinion analytics based on sleep comments, and environmental data for each person.
     """
     serializer_class = SleepInfoAnalyticsSerializer
 
@@ -118,7 +128,8 @@ class SleepInfoAnalyticsView(generics.ListAPIView):
 
 class SleepInfoAnalyticsByPersonView(generics.RetrieveAPIView):
     """
-    Returns analytics data for sleep information related to a specific person identified by person_id, including average sleep scores, opinion analytics based on sleep comments, and environmental data.
+    Returns analytics data for sleep information related to a specific person identified by person_id,
+    including average sleep scores, opinion analytics based on sleep comments, and environmental data.
     """
     serializer_class = SleepInfoAnalyticsSerializer
 

@@ -86,8 +86,8 @@ If you prefer a manual setup, follow the steps outlined in [manual.md](installat
     - **Endpoint:** `/info/sleep/date/`
     - **Method:** GET
     - **Description:** Retrieves sleep entries that occurred on a specific date. The date can be
-      specified using query parameters `day`, `mouth`, and `year`. For
-      example, `/info/sleep/date/day/10/mouth/5/year/2024` would retrieve sleep entries for May 10,
+      specified using query parameters `day`, `month`, and `year`. For
+      example, `/info/sleep/date?day=10&month=5?year=2024` would retrieve sleep entries for May 10,
         2024.
 
 5. **Sleep Information by Location Within Range**
