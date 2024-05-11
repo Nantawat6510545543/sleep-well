@@ -15,8 +15,8 @@ class NoiseStationSerializer(serializers.ModelSerializer):
 
 
 class SleepInfoSerializer(serializers.ModelSerializer):
-    closest_weather = WeatherSerializer()
-    closest_noise_station = NoiseStationSerializer()
+    closest_weather = WeatherSerializer(required=False, allow_null=True)
+    closest_noise_station = NoiseStationSerializer(required=False, allow_null=True)
 
     class Meta:
         model = Sleep
@@ -30,8 +30,11 @@ class PersonInfoSerializer(serializers.ModelSerializer):
 
 
 class SentimentAnalyticsSerializer(serializers.Serializer):
-    average_sentiment = serializers.FloatField()
     total_comments = serializers.IntegerField()
+    positive_percentage = serializers.FloatField()
+    negative_percentage = serializers.FloatField()
+    neutral_percentage = serializers.FloatField()
+    average_sentiment = serializers.FloatField()
 
 
 class EnvironmentSerializer(serializers.Serializer):

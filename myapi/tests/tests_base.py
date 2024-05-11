@@ -57,8 +57,8 @@ class BaseTest(TestCase):
 
         # B is too far from any station
         self.personB = factory.create_person('Female', 25, 155.0, 50.0)
-        self.sleepB1 = factory.create_sleep(self.personB, 0, 8, 70, 50, 100)
-        self.sleepB2 = factory.create_sleep(self.personB, 1, 7, 40, 50, 100)
+        self.sleepB1 = factory.create_sleep(self.personB, 0, 8, 70, 1, 1)
+        self.sleepB2 = factory.create_sleep(self.personB, 1, 7, 40, 1, 1)
 
         # C has some sleep that have no station within range
         self.personC = factory.create_person('Male', 50, 185.0, 90.0)
@@ -68,12 +68,9 @@ class BaseTest(TestCase):
 
         # D has some sleep that have different station within range to A
         self.personD = factory.create_person('Female', 12, 120.0, 30.0)
-        self.sleepD1 = factory.create_sleep(self.personD, 0, 12, 90, 0.06,
-                                            0.06)
-        self.sleepD2 = factory.create_sleep(self.personD, 1, 9, 50, 0.06,
-                                            0.06)
-        self.sleepD3 = factory.create_sleep(self.personD, 2, 9, 50, 0.06,
-                                            0.06)
+        self.sleepD1 = factory.create_sleep(self.personD, 0, 12, 90, 0.06, 0.06)
+        self.sleepD2 = factory.create_sleep(self.personD, 1, 9, 50, 0.06, 0.06)
+        self.sleepD3 = factory.create_sleep(self.personD, 2, 9, 50, 0.06, 0.06)
 
         # station for all tests
         self.weather1 = factory.create_weather(0, 25.0, 5.0, 60, 0.03, 0.03)
@@ -84,3 +81,33 @@ class BaseTest(TestCase):
         # station for D only
         self.weather3 = factory.create_weather(2, 40.0, 0, 50, 0.06, 0.06)
         self.noise3 = factory.create_noise(2, 75.0, 0.06, 0.06)
+
+    def set_linked(self):
+        # set the closet expected environment to test data
+        self.sleepA1.closest_weather = self.weather1
+        self.sleepA1.closest_noise_station = self.noise1
+        self.sleepA2.closest_weather = self.weather2
+        self.sleepA2.closest_noise_station = self.noise2
+        self.sleepB1.closest_weather = None
+        self.sleepB1.closest_noise_station = None
+        self.sleepB2.closest_weather = None
+        self.sleepB2.closest_noise_station = None
+        self.sleepC1.closest_weather = self.weather1
+        self.sleepC1.closest_noise_station = self.noise1
+        self.sleepC2.closest_weather = self.weather2
+        self.sleepC2.closest_noise_station = self.noise2
+        self.sleepC3.closest_weather = None
+        self.sleepC3.closest_noise_station = None
+        self.sleepD1.closest_weather = self.weather1
+        self.sleepD1.closest_noise_station = self.noise1
+        self.sleepD2.closest_weather = self.weather2
+        self.sleepD2.closest_noise_station = self.noise2
+        self.sleepD3.closest_weather = self.weather3
+        self.sleepD3.closest_noise_station = self.noise3
+
+    def get_sleep_list(self, exception=None):
+        sleeps = [self.sleepA1, self.sleepA2, self.sleepB1, self.sleepB2, self.sleepC1,
+                  self.sleepC2, self.sleepC3, self.sleepD1, self.sleepD2, self.sleepD3]
+        if exception is None:
+            return sleeps
+        return [x for x in sleeps if x not in exception]

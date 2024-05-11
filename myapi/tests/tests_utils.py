@@ -12,6 +12,8 @@ class UtilsTests(BaseTest):
             (self.sleepA2, Weather, self.weather2),
             (self.sleepA2, Noise, self.noise2),
             (self.sleepB1, Weather, None),
+            (self.sleepB1, Noise, None),
+            (self.sleepB2, Weather, None),
             (self.sleepB2, Noise, None),
             (self.sleepC1, Weather, self.weather1),
             (self.sleepC1, Noise, self.noise1),
@@ -38,8 +40,7 @@ class UtilsTests(BaseTest):
 
         # Test case for "A": two closest stations, complete data expected
         sleeps = [self.sleepA1, self.sleepA2]
-        self.check_environment(sleeps, temp_avg, precip_avg, humidity_avg,
-                               noise_avg)
+        self.check_environment(sleeps, temp_avg, precip_avg, humidity_avg, noise_avg)
 
         # Test case for "B": no closest stations, all data should be null
         sleeps = [self.sleepB1, self.sleepB2]
@@ -47,25 +48,20 @@ class UtilsTests(BaseTest):
 
         # Test case for "C": missing stations, same result as "A" expected
         sleeps = [self.sleepC1, self.sleepC2, self.sleepC3]
-        self.check_environment(sleeps, temp_avg, precip_avg, humidity_avg,
-                               noise_avg)
+        self.check_environment(sleeps, temp_avg, precip_avg, humidity_avg, noise_avg)
 
-        temp_avg = (self.weather1.temp_c + self.weather2.temp_c
-                    + self.weather3.temp_c) / 3
+        temp_avg = (self.weather1.temp_c + self.weather2.temp_c + self.weather3.temp_c) / 3
         precip_avg = (self.weather1.precip_mm + self.weather2.precip_mm
                       + self.weather3.precip_mm) / 3
         humidity_avg = (self.weather1.humidity + self.weather2.humidity
                         + self.weather3.humidity) / 3
-        noise_avg = (self.noise1.noise + self.noise2.noise
-                     + self.noise3.noise) / 3
+        noise_avg = (self.noise1.noise + self.noise2.noise + self.noise3.noise) / 3
 
         # Test case for "D": extra station
         sleeps = [self.sleepD1, self.sleepD2, self.sleepD3]
-        self.check_environment(sleeps, temp_avg, precip_avg, humidity_avg,
-                               noise_avg)
+        self.check_environment(sleeps, temp_avg, precip_avg, humidity_avg, noise_avg)
 
-    def check_environment(self, sleeps, temp=None, precip=None, humidity=None,
-                          noise=None):
+    def check_environment(self, sleeps, temp=None, precip=None, humidity=None, noise=None):
         result = get_environments(sleeps)
 
         self.assertAlmostEqual(result.get('avg_temp_c'), temp, places=2)
