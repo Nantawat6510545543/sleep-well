@@ -13,7 +13,6 @@ info_patterns = [
              name='sleep-info-location-within-5-km'),
         path("<float:lat>-<float:lon>/range/<int:km>", views.SleepInfoByLocationView.as_view(),
              name='sleep-info-location-within-range'),
-        path("date/", views.SleepInfoByDateView.as_view()),
     ])),
 
     path('person/', include([

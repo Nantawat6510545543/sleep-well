@@ -68,7 +68,12 @@ If you prefer a manual setup, follow the steps outlined in [manual.md](installat
     - **Endpoint:** `/info/sleep/`
     - **Method:** GET
     - **Description:** Retrieves a list of all sleep entries with associated
-      weather and noise data.
+      weather and noise data. 
+      
+      The date can be specified using query parameters `day`, `month`, or `year`.
+
+      For example, `/info/sleep?day=10&month=5?year=2024` would retrieve sleep entries for May 10, 2024.
+      And `/info/sleep?month=5` would retrieve sleep entries for the month of May.
 
 2. **Get Sleep Information by ID**
     - **Endpoint:** `/info/sleep/<int:sleep_id>/`
@@ -82,15 +87,7 @@ If you prefer a manual setup, follow the steps outlined in [manual.md](installat
     - **Method:** GET
     - **Description:** Retrieves sleep entries filtered by the person's ID.
 
-4. **Sleep Information by Date**
-    - **Endpoint:** `/info/sleep/date/`
-    - **Method:** GET
-    - **Description:** Retrieves sleep entries that occurred on a specific date. The date can be
-      specified using query parameters `day`, `month`, and `year`. For
-      example, `/info/sleep/date?day=10&month=5?year=2024` would retrieve sleep entries for May 10,
-        2024.
-
-5. **Sleep Information by Location Within Range**
+4. **Sleep Information by Location Within Range**
     - **Endpoint:** `Endpoint: /info/sleep/<float:lat>-<float:lon>`
     - **Endpoint:** `Endpoint: /info/sleep/<float:lat>-<float:lon>/range/<int:km>`
     - **Method:** GET
@@ -99,25 +96,25 @@ If you prefer a manual setup, follow the steps outlined in [manual.md](installat
       the default range of 5 kilometers is used to filter sleep entries within this distance from
       the specified location.
 
-6. **List Person Information**
+5. **List Person Information**
     - **Endpoint:** `/info/person/`
     - **Method:** GET
     - **Description:** Retrieves a list of all persons with their information.
 
-7. **Get Person Information by ID**
+6. **Get Person Information by ID**
     - **Endpoint:** `/info/person/<int:person_id>/`
     - **Method:** GET
     - **Description:** Retrieves person information based on the provided
       person ID.
 
-8. **Sleep Analytics for All Persons**
+7. **Sleep Analytics for All Persons**
     - **Endpoint:** `/info/sleep-analytics/`
     - **Method:** GET
     - **Description:** Performs analytics on sleep data for all persons,
       including average sleep score, sentiment analysis of sleep comments, and
       environmental data analysis.
 
-9. **Sleep Analytics for a Specific Person**
+8. **Sleep Analytics for a Specific Person**
     - **Endpoint:** `/info/sleep-analytics/person/<int:person_id>/`
     - **Endpoint:** `/info/person/<int:person_id>/sleep-analytics/`
     - **Method:** GET

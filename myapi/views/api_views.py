@@ -2,7 +2,7 @@ from django.db.models import Q
 from django.shortcuts import get_object_or_404
 from rest_framework import generics
 
-from myapi.models import Sleep, Person, Weather, Noise
+from myapi.models import *
 from myapi.serializers import SleepInfoSerializer, PersonInfoSerializer, \
     SleepInfoAnalyticsSerializer
 from myapi.utils import get_analytics_data, get_closest_station, get_sleep_within_range
@@ -24,11 +24,28 @@ class PersonInfoView(generics.RetrieveAPIView):
 class SleepInfoListView(generics.ListAPIView):
     """
     Returns a list of sleep information with additional data about the closest environment for each sleep entry.
+    Can accept optional `day`, `month`, or `year` query parameters to retrieve all sleep entries 
+    that occurred on a specific date.
     """
     serializer_class = SleepInfoSerializer
 
     def get_queryset(self):
         sleeps = Sleep.objects.all()
+        filters = Q()
+
+        if "day" in self.request.GET:
+            day = self.request.GET.get('day')
+            filters &= Q(sleep_time__day=day)
+
+        if "month" in self.request.GET:
+            month = self.request.GET.get('month')
+            filters &= Q(sleep_time__month=month)
+        
+        if "year" in self.request.GET:
+            year = self.request.GET.get('year')
+            filters &= Q(sleep_time__year=year)
+
+        sleeps = sleeps.filter(filters)
 
         for sleep in sleeps:
             sleep.closest_weather = get_closest_station(sleep, Weather)
