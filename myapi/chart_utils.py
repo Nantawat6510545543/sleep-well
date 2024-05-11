@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 from typing import Any
 from myapi.models import *
 
-from myapi.utils import get_sentiment
+from myapi.analytics import get_sentiment
 import numpy as np
 import plotly.express as px
 import plotly.graph_objects as go

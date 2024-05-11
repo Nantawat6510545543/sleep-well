@@ -5,7 +5,8 @@ from rest_framework import generics
 from myapi.models import *
 from myapi.serializers import SleepInfoSerializer, PersonInfoSerializer, \
     SleepInfoAnalyticsSerializer
-from myapi.utils import get_analytics_data, get_closest_station, get_sleep_within_range
+from myapi.utils import get_closest_station, get_sleep_within_range
+from myapi.analytics import get_analytics_data
 
 
 class PersonInfoListView(generics.ListAPIView):
@@ -24,13 +25,12 @@ class PersonInfoView(generics.RetrieveAPIView):
 class SleepInfoListView(generics.ListAPIView):
     """
     Returns a list of sleep information with additional data about the closest environment for each sleep entry.
-    Can accept optional `day`, `month`, or `year` query parameters to retrieve all sleep entries 
+    Can accept optional `day`, `month`, or `year` query parameters to retrieve all sleep entries
     that occurred on a specific date.
     """
     serializer_class = SleepInfoSerializer
 
     def get_queryset(self):
-        print("@22321")
         sleeps = Sleep.objects.all()
         filters = Q()
 
@@ -41,7 +41,7 @@ class SleepInfoListView(generics.ListAPIView):
         if "month" in self.request.GET:
             month = self.request.GET.get('month')
             filters &= Q(sleep_time__month=month)
-        
+
         if "year" in self.request.GET:
             year = self.request.GET.get('year')
             filters &= Q(sleep_time__year=year)
@@ -119,7 +119,7 @@ class SleepInfoByDateView(generics.ListAPIView):
         if "month" in self.request.GET:
             month = self.request.GET.get('month')
             filters &= Q(sleep_time__month=month)
-        
+
         if "year" in self.request.GET:
             year = self.request.GET.get('year')
             filters &= Q(sleep_time__year=year)

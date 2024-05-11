@@ -64,33 +64,3 @@ def get_environments(sleeps):
 
     return context
 
-
-def get_sentiment(comment):
-    """
-    >>> get_sentiments("I love this product!")
-    0.5
-    >>> get_sentiments("This movie is terrible.")
-    -1.0
-    >>> get_sentiments("The weather is nice today.")
-    0.6
-    """
-    return TextBlob(comment).sentiment.polarity
-
-
-def get_analytics_data(person_id):
-    sleeps = Sleep.objects.filter(person_id=person_id).select_related('person')
-    average_score = sleeps.aggregate(avg_score=Avg('sleep_score'))['avg_score']
-    comments_list = sleeps.values_list('sleep_comment', flat=True)
-
-    sentiments_list = [get_sentiment(comment) for comment in comments_list]
-    average_sentiment = np.mean(sentiments_list) if sentiments_list else None
-
-    return {
-        'person_id': person_id,
-        'average_score': average_score,
-        'opinion_analytics': {
-            'average_sentiment': average_sentiment,
-            'total_comments': comments_list.count()
-        },
-        'environment': get_environments(sleeps),
-    }

@@ -1,5 +1,5 @@
 class FloatUrlParameterConverter:
-    regex = '[0-9]+\.?[0-9]+'
+    regex = r'-?\d+(?:\.\d+)?(?:[eE][-+]?\d+)?'
 
     def to_python(self, value):
         return float(value)
