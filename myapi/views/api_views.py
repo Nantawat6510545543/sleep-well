@@ -5,8 +5,7 @@ from rest_framework import generics
 from myapi.models import *
 from myapi.serializers import SleepInfoSerializer, PersonInfoSerializer, \
     SleepInfoAnalyticsSerializer
-from myapi.utils import get_closest_station, get_sleep_within_range
-from myapi.analytics import get_analytics_data
+from myapi.utils import get_analytics_data, get_closest_station, get_sleep_within_range
 
 
 class PersonInfoListView(generics.ListAPIView):
@@ -25,8 +24,7 @@ class PersonInfoView(generics.RetrieveAPIView):
 class SleepInfoListView(generics.ListAPIView):
     """
     Returns a list of sleep information with additional data about the closest environment for each sleep entry.
-    Can accept optional `day`, `month`, or `year` query parameters to retrieve all sleep entries
-    that occurred on a specific date.
+    Can accept optional `day`, `month`, or `year` query parameters to retrieve all sleep entries that occurred on a specific date.
     """
     serializer_class = SleepInfoSerializer
 
@@ -103,8 +101,7 @@ class SleepInfoByLocationView(generics.ListAPIView):
 
 class SleepInfoByDateView(generics.ListAPIView):
     """
-    Returns sleep information for all sleep entries that occurred on a specific date,
-    including data about the closest environment for each sleep entry.
+    Returns sleep information for all sleep entries that occurred on a specific date, including data about the closest environment for each sleep entry.
     """
     serializer_class = SleepInfoSerializer
 

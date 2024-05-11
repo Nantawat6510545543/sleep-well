@@ -6,6 +6,7 @@ from textblob import TextBlob
 
 from myapi.models import *
 from django.db.models import Avg
+from myapi.analytics import analyze_opinions
 
 
 def get_closest_station(sleep: Sleep, stations: models.Model):
@@ -64,3 +65,15 @@ def get_environments(sleeps):
 
     return context
 
+
+def get_analytics_data(person_id):
+    sleeps = Sleep.objects.filter(person_id=person_id).select_related('person')
+    average_score = sleeps.aggregate(avg_score=Avg('sleep_score'))['avg_score']
+    comments_list = sleeps.values_list('sleep_comment', flat=True)
+
+    return {
+        'person_id': person_id,
+        'average_score': average_score,
+        'opinion_analytics': analyze_opinions(comments_list),
+        'environment': get_environments(sleeps),
+    }

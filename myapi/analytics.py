@@ -30,7 +30,7 @@ def preprocessing(comment):
     return preprocessed_comment
 
 
-def get_analytics_data(comments_list):
+def analyze_opinions(comments_list):
     if not comments_list:
         return None
     positive_comments = []
@@ -43,8 +43,7 @@ def get_analytics_data(comments_list):
         preprocessed_comment = preprocessing(comment)
 
         # Perform sentiment analysis using TextBlob
-        blob = TextBlob(preprocessed_comment)
-        sentiment_score = blob.sentiment.polarity
+        sentiment_score = get_sentiment(preprocessed_comment)
 
         total_sentiment_score += sentiment_score
 
