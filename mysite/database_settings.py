@@ -41,11 +41,11 @@ def configure_database_settings(BASE_DIR):
             cloud_database = {
                 'default': {
                     'ENGINE': 'django.db.backends.mysql',
-                    'NAME': config("DB_NAME", default=None),
-                    'USER': config("DB_USER", default=None),
-                    'PASSWORD': config("DB_PASSWD", default=None),
-                    'HOST': config("DB_HOST", default=None),
-                    'PORT': config("DB_PORT", default=None),
+                    'NAME': config("DB_NAME", default=""),
+                    'USER': config("DB_USER", default=""),
+                    'PASSWORD': config("DB_PASSWD", default=""),
+                    'HOST': config("DB_HOST", default=""),
+                    'PORT': config("DB_PORT", default=""),
                     'OPTIONS': {
                         'connect_timeout': 10,
                     }

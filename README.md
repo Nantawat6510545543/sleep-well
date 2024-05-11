@@ -47,19 +47,19 @@ If you prefer a manual setup, follow the steps outlined in [manual.md](installat
 
 ### Documents
 
-* [[Testing plan]]
+* [Testing plan](https://github.com/Nantawat6510545543/sleep-well/wiki/Testing-plan)
 
 * [Presentation Slide]()
 
 ### Application Architecture
 
-* [[Class Diagram]]
+* [Class Diagram](https://github.com/Nantawat6510545543/sleep-well/wiki/Class-Diagram)
 
-* [[Sequence Diagram]]
+* [Sequence Diagram](https://github.com/Nantawat6510545543/sleep-well/wiki/Sequence-Diagram)
 
-* [[Domain Model]]
+* [Domain Model](https://github.com/Nantawat6510545543/sleep-well/wiki/Domain-Model)
 
-* [[Use Case Diagram]]
+* [Use Case Diagram](https://github.com/Nantawat6510545543/sleep-well/wiki/Use-Case-Diagram)
 
 ## Endpoints
 
