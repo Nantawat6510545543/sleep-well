@@ -22,12 +22,12 @@ info_patterns = [
         path('<int:person_id>/sleep/', views.SleepInfoByPersonView.as_view(),
              name='sleep-info-person'),
         path('<int:person_id>/sleep-analytics/',
-             views.SleepInfoAnalyticsViewByPerson.as_view(), name='sleep-analytics-person'),
+             views.SleepInfoAnalyticsByPersonView.as_view(), name='sleep-analytics-person'),
     ])),
 
     path('sleep-analytics/', include([
         path('', views.SleepInfoAnalyticsView.as_view(), name='sleep-analytics'),
-        path('person/<int:person_id>/', views.SleepInfoAnalyticsViewByPerson.as_view(),
+        path('person/<int:person_id>/', views.SleepInfoAnalyticsByPersonView.as_view(),
              name='sleep-analytics-person'),
     ])),
 ]

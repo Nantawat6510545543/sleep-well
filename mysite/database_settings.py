@@ -45,7 +45,10 @@ def configure_database_settings(BASE_DIR):
                     'USER': config("DB_USER", default=None),
                     'PASSWORD': config("DB_PASSWD", default=None),
                     'HOST': config("DB_HOST", default=None),
-                    'PORT': '',
+                    'PORT': config("DB_PORT", default=None),
+                    'OPTIONS': {
+                        'connect_timeout': 10,
+                    }
                 }
             }
             logging.info("Using a valid DATABASE. "

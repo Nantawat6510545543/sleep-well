@@ -133,7 +133,7 @@ class SleepInfoAnalyticsView(generics.ListAPIView):
         return data
 
 
-class SleepInfoAnalyticsViewByPerson(generics.RetrieveAPIView):
+class SleepInfoAnalyticsByPersonView(generics.RetrieveAPIView):
     """
     Returns analytics data for sleep information related to a specific person identified by person_id, including average sleep scores, opinion analytics based on sleep comments, and environmental data.
     """

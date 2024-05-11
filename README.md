@@ -7,6 +7,13 @@ weather and noise levels), and personal information about the individual's
 sleep patterns. Additionally, the API will include analytics features to
 analyze sleep comments and provide insights into sleep quality trends.
 
+## Install instructions
+Please configure the `sample.env` file before proceeding with the installation. Refer to the detailed configuration guide in [configurations.md](Installation%2Fconfigurations.md).
+
+For a quick and efficient setup, it is recommended to use the provided script. Find instructions in [script.md](Installation%2Fscript.md).
+
+If you prefer a manual setup, follow the steps outlined in [manual.md](Installation%2Fmanual.md).
+
 ### Endpoints
 
 1. **List Sleep Information**
