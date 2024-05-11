@@ -86,9 +86,9 @@
             <div class="card">
                 <div class="card-body">
                     <h5 class="card-title">More Endpoints </h5>
-                    <h6>Endpoint: /info/sleep/date/</h6>
-                    <a>Description: Get sleep by date (parameters day, mouth, and year)</a>
-                    <p>ex: /info/sleep/date/day/10/mouth/5/year/2024 for May 10.</p>
+                    <h6>Endpoint: /info/sleep?day={day}&month={month}&year={year}</h6>
+                    <a>Description: Get sleep by date (parameters day, month, and year)</a>
+                    <p>ex: /info/sleep/date?day=10&month=5 for May 10.</p>
                     <h6>Endpoint: /info/sleep/{lat}-{lon}</h6>
                     <h6>Endpoint: /info/sleep/{lat}-{lon}/range/{km}</h6>
                     <p>Description: Get sleep with range (If no specific default range = 5 km)</p>

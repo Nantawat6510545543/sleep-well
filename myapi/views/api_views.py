@@ -30,6 +30,7 @@ class SleepInfoListView(generics.ListAPIView):
     serializer_class = SleepInfoSerializer
 
     def get_queryset(self):
+        print("@22321")
         sleeps = Sleep.objects.all()
         filters = Q()
 
