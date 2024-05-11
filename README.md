@@ -1,5 +1,15 @@
 # sleep-well
 
+## Team members
+
+1. Nantawat Sukrisunt 6510545543
+2. Naytitorn Chaovirachot 6510545560
+
+All team members are affiliated with the Department of Engineering, Faculty of Software and
+Knowledge Engineering, and are students at Kasetsart University.
+
+## Overview
+
 Sleep-Well is a RESTful API web service designed to offer sleep quality data to
 users. The API will provide endpoints for accessing sleep information,
 including sleep duration, quality scores, environmental factors (such as
@@ -8,13 +18,50 @@ sleep patterns. Additionally, the API will include analytics features to
 analyze sleep comments and provide insights into sleep quality trends.
 
 ## Install instructions
-Please configure the `sample.env` file before proceeding with the installation. Refer to the detailed configuration guide in [configurations.md](Installation%2Fconfigurations.md).
 
-For a quick and efficient setup, it is recommended to use the provided script. Find instructions in [script.md](Installation%2Fscript.md).
+Please configure the `sample.env` file before proceeding with the installation. Refer to the
+detailed configuration guide in [configurations.md](installation%2Fconfigurations.md).
 
-If you prefer a manual setup, follow the steps outlined in [manual.md](Installation%2Fmanual.md).
+For a quick and efficient setup, it is recommended to use the provided script. Find instructions
+in [script.md](installation%2Fscript.md).
 
-### Endpoints
+If you prefer a manual setup, follow the steps outlined in [manual.md](installation%2Fmanual.md).
+
+## How to run
+
+1. To run the local server
+
+   ```
+   python manage.py runserver
+   ```
+
+2. To access the app at http://localhost:8000
+
+3. To deactivate the virtual environment
+
+   ```
+   deactivate
+   ```
+
+## Project documentation
+
+### Documents
+
+* [[Testing plan]]
+
+* [Presentation Slide]()
+
+### Application Architecture
+
+* [[Class Diagram]]
+
+* [[Sequence Diagram]]
+
+* [[Domain Model]]
+
+* [[Use Case Diagram]]
+
+## Endpoints
 
 1. **List Sleep Information**
     - **Endpoint:** `/info/sleep/`
