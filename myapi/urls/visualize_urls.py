@@ -9,6 +9,7 @@ visualize_patterns = [
     path('age/', AgeView.as_view(), name='age-view'),
     path('height/', HeightView.as_view(), name='height-view'),
     path('weight/', WeightView.as_view(), name='weight-view'),
+    path('sleep-analytics/', SleepAnalyticsView.as_view(), name='sleep-analytics-view'),
     path('sleep/', get_sleep_visualize_view, name='sleep-view'),
-    path('sleep/<int:person_id>', SleepView.as_view(), name='sleep-detail')
+    path('sleep/<int:person_id>', SleepView.as_view(), name='sleep-detail'),
 ]

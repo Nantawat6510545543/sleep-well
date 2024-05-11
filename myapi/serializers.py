@@ -42,7 +42,7 @@ class EnvironmentSerializer(serializers.Serializer):
 
 
 class SleepInfoAnalyticsSerializer(serializers.Serializer):
-    person_info = PersonInfoSerializer()
+    person_id = serializers.IntegerField()
     average_score = serializers.FloatField()
     opinion_analytics = SentimentAnalyticsSerializer()
     environment = EnvironmentSerializer()

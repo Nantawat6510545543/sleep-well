@@ -32,6 +32,8 @@ class HeightView(BaseVisualizeView):
 class WeightView(BaseVisualizeView):
     strategy_class = WeightStrategy
 
+class SleepAnalyticsView(BaseVisualizeView):
+    strategy_class = SleepAnalyticsStrategy
 
 class SleepView(TemplateView):
     template_name = 'myapi/sleep_visualize.html'

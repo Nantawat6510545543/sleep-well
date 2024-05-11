@@ -2,6 +2,7 @@ from abc import ABC, abstractmethod
 from typing import Any
 from myapi.models import *
 
+from myapi.utils import get_sentiment
 import numpy as np
 import plotly.express as px
 import plotly.graph_objects as go
@@ -93,7 +94,31 @@ class WeightStrategy(VisualizeStrategy):
         chart = fig.to_html()
         return chart
 
-# TODO format graph position
+
+class SleepAnalyticsStrategy(VisualizeStrategy):
+    layout = {
+        "title": "Average Sleep Score Visualization",
+        "xaxis_title": "Sleep Score",
+    }
+
+    def get_chart() -> str:
+        data = []
+        for person in Person.objects.all():
+            sleeps = Sleep.objects.filter(person_id=person.person_id).select_related('person')
+            comments_list = sleeps.values_list('sleep_comment', flat=True)
+            sentiments_list = [get_sentiment(comment) for comment in comments_list]
+            average_sentiment = np.mean(sentiments_list) if sentiments_list else None
+            data.append(average_sentiment)
+
+        fig = px.histogram(x=data, nbins=20)
+        fig.update_layout(**SleepAnalyticsStrategy.layout)
+        fig.update_traces(name=f"Sleep Score Data", showlegend=True)
+        chart = fig.to_html()
+        return chart
+
+
+
+
 # TODO refactor
 # interface for type hinting/ forcing implementation
 class VisualizeByPersonStrategy(ABC):

@@ -1,14 +1,13 @@
 from datetime import datetime
 
-from django.db.models import Avg
 from django.shortcuts import get_object_or_404
 from rest_framework import generics
 
-from myapi.analytics import analyze_opinions
 from myapi.models import Sleep, Person, Weather, Noise
 from myapi.serializers import SleepInfoSerializer, PersonInfoSerializer, \
     SleepInfoAnalyticsSerializer
-from myapi.utils import get_closest_station, get_environments, get_sleep_within_range
+from myapi.utils import get_analytics_data, get_closest_station, \
+    get_environments, get_sleep_within_range
 
 
 class PersonInfoListView(generics.ListAPIView):
@@ -114,23 +113,7 @@ class SleepInfoAnalyticsView(generics.ListAPIView):
 
     def get_queryset(self):
         persons = Person.objects.all()
-
-        data = []
-        for person in persons:
-            sleeps = (Sleep.objects.filter(person_id=person.person_id).select_related('person'))
-            average_score = sleeps.aggregate(avg_score=Avg('sleep_score'))['avg_score']
-            sleep_comments = [sleep.sleep_comment for sleep in sleeps]
-            opinion_analytics = analyze_opinions(sleep_comments)
-            environment = get_environments(sleeps)
-
-            data.append({
-                'person_info': person,
-                'average_score': average_score,
-                'opinion_analytics': opinion_analytics,
-                'environment': environment,
-            })
-
-        return data
+        return [get_analytics_data(person.person_id) for person in persons]
 
 
 class SleepInfoAnalyticsByPersonView(generics.RetrieveAPIView):
@@ -141,18 +124,4 @@ class SleepInfoAnalyticsByPersonView(generics.RetrieveAPIView):
 
     def get_object(self):
         person_id = self.kwargs.get('person_id')
-        person_info = Person.objects.filter(person_id=person_id).first()
-
-        sleeps = Sleep.objects.filter(person_id=person_id).select_related('person')
-        average_score = sleeps.aggregate(avg_score=Avg('sleep_score'))['avg_score']
-        sleep_comments = [sleep.sleep_comment for sleep in sleeps]
-        opinion_analytics = analyze_opinions(sleep_comments)
-
-        environment = get_environments(sleeps)
-
-        return {
-            'person_info': person_info,
-            'average_score': average_score,
-            'opinion_analytics': opinion_analytics,
-            'environment': environment,
-        }
+        return get_analytics_data(person_id)
