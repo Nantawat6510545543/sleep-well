@@ -10,7 +10,8 @@
           rel="stylesheet">
 </head>
 
-<body><div class="container mt-4">
+<body>
+<div class="container mt-4">
     <h1 class="text-center mb-4">Sleep and Environment Dashboard</h1>
     <div class="row">
         <div class="col-md-12">
@@ -34,16 +35,14 @@
                     <form action="/info/sleep/" method="GET">
                         <div class="form-group">
                             <label for="personIdInput">Enter Sleep ID:</label>
-                            <input type="text" class="form-control"
-                                   id="sleepIdInput" name="sleep_id">
+                            <input type="text" class="form-control" id="sleepIdInput"
+                                   name="sleep_id">
                         </div>
-                        <button type="submit" class="btn btn-primary">View
-                            Sleep Information
+                        <button type="submit" class="btn btn-primary">View Sleep Information
                         </button>
                     </form>
                     <p></p>
-                    <a href="/info/sleep/" class="btn btn-secondary">View All
-                        Sleep</a>
+                    <a href="/info/sleep/" class="btn btn-secondary">View All Sleep</a>
                 </div>
             </div>
         </div>
@@ -55,16 +54,14 @@
                     <form action="/info/person/" method="GET">
                         <div class="form-group">
                             <label for="personIdInput">Enter Person ID:</label>
-                            <input type="text" class="form-control"
-                                   id="personIdInput" name="person_id">
+                            <input type="text" class="form-control" id="personIdInput"
+                                   name="person_id">
                         </div>
-                        <button type="submit" class="btn btn-primary">View
-                            Person Information
+                        <button type="submit" class="btn btn-primary">View Person Information
                         </button>
                     </form>
                     <p></p>
-                    <a href="/info/person/" class="btn btn-secondary">View All
-                        Persons</a>
+                    <a href="/info/person/" class="btn btn-secondary">View All Persons</a>
                 </div>
             </div>
         </div>
@@ -77,11 +74,24 @@
                 <div class="card-body">
                     <h5 class="card-title">More Endpoints </h5>
                     <h6>Endpoint: /info/sleep/person/{person_id}</h6>
-                    <p>Description: Get information about sleep records for a
-                        specific person.</p>
-                    <h6>Endpoint: sleep-analytics/person/{int:person_id}</h6>
-                    <p>Description: Get average environment score by person
-                        ID.</p>
+                    <p>Description: Get information about sleep records for a specific person.</p>
+                    <h6>Endpoint: /info/sleep-analytics</h6>
+                    <p>Description: Get average environment score for all people.</p>
+                    <h6>Endpoint: /info/sleep-analytics/person/{person_id}</h6>
+                    <p>Description: Get average environment score by person ID.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">More Endpoints </h5>
+                    <h6>Endpoint: /info/sleep/date/</h6>
+                    <a>Description: Get sleep by date (parameters day, mouth, and year)</a>
+                    <p>ex: /info/sleep/date/day/10/mouth/5/year/2024 for May 10.</p>
+                    <h6>Endpoint: /info/sleep/{lat}-{lon}</h6>
+                    <h6>Endpoint: /info/sleep/{lat}-{lon}/range/{km}</h6>
+                    <p>Description: Get sleep with range (If no specific default range = 5 km)</p>
                 </div>
             </div>
         </div>

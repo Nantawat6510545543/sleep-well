@@ -110,15 +110,15 @@ If you prefer a manual setup, follow the steps outlined in [manual.md](installat
       person ID.
 
 8. **Sleep Analytics for All Persons**
-    - **Endpoint:** `/sleep-analytics/`
+    - **Endpoint:** `/info/sleep-analytics/`
     - **Method:** GET
     - **Description:** Performs analytics on sleep data for all persons,
       including average sleep score, sentiment analysis of sleep comments, and
       environmental data analysis.
 
 9. **Sleep Analytics for a Specific Person**
-    - **Endpoint:** `/sleep-analytics/person/<int:person_id>/`
-    - **Endpoint:** `/person/<int:person_id>/sleep-analytics/`
+    - **Endpoint:** `/info/sleep-analytics/person/<int:person_id>/`
+    - **Endpoint:** `/info/person/<int:person_id>/sleep-analytics/`
     - **Method:** GET
     - **Description:** Performs analytics on sleep data for a specific person,
       including average sleep score, sentiment analysis of sleep comments, and
