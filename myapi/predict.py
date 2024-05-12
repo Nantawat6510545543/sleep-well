@@ -22,14 +22,13 @@ def svm_preprocessing(data):
                 "temp_c": 0,
                 "precip_mm": 0,
                 "humidity": 0,
-                "noise": 0
             })
 
         if entry["closest_noise_station"] is not None:
             flat_entry.update(entry["closest_noise_station"])
         else:
             flat_entry.update({
-                "Noise": 0
+                "noise": 0
             })
         flat_entry["sleep_duration"] = entry["sleep_duration"]
         flat_entry["sleep_comment"] = get_sentiment(entry["sleep_comment"])

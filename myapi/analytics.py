@@ -40,6 +40,7 @@ def analyze_opinions(comments_list):
 
     for comment in comments_list:
         # Preprocess each comment before sentiment analysis
+        preprocessed_comment = comment_preprocessing(comment)
 
         # Perform sentiment analysis using TextBlob
         sentiment_score = get_sentiment(preprocessed_comment)
