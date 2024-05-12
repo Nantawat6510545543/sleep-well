@@ -3,13 +3,15 @@ from typing import Any
 from myapi.models import *
 
 from myapi.analytics import get_sentiment
+from myapi.utils import get_closest_station
 import numpy as np
 import plotly.express as px
 import plotly.graph_objects as go
 
 
 def add_mean_line_to_chart(data_list: list[Any], fig: go.Figure):
-    mean_data = np.mean(data_list)  # get mean
+    arr = np.array(data_list, dtype=float)
+    mean_data = np.nanmean(arr)  # get mean
     chart_type = fig.data[0].type   # get chart type
 
     line_settings = {
@@ -29,15 +31,18 @@ def add_mean_line_to_chart(data_list: list[Any], fig: go.Figure):
 
 # interface for type hinting/ forcing implementation
 class VisualizeStrategy(ABC):
+    # Should return HTML string representation
     @abstractmethod
-    def get_chart() -> str: # Should return HTML string representation
+    def get_chart() -> str: 
         pass
+
 
 class GenderStrategy(VisualizeStrategy):
     layout = {
         "title": "Gender Visualization"
     }
 
+    # TODO fix hardcode
     def get_chart() -> str:
         gender_list = ["Male", "Female", "Other"]
         gender_count_list = [Person.objects.filter(sex=each_gender).count() for each_gender in gender_list]
@@ -46,6 +51,7 @@ class GenderStrategy(VisualizeStrategy):
 
         chart = fig.to_html()
         return chart
+
 
 class AgeStrategy(VisualizeStrategy):
     layout = {
@@ -113,6 +119,143 @@ class SleepAnalyticsStrategy(VisualizeStrategy):
         fig = px.histogram(x=data, nbins=20)
         fig.update_layout(**SleepAnalyticsStrategy.layout)
         fig.update_traces(name=f"Sleep Score Data", showlegend=True)
+        chart = fig.to_html()
+        return chart
+
+
+class TempCStrategy(VisualizeStrategy):
+    layout = {
+        "title": "Average Temperature Visualization",
+        "xaxis_title": "Time",
+        "yaxis_title": "Temperature (Celcius)",
+    }
+
+    def get_chart() -> str:
+        temp_c_list = []
+        sleep_time_list = []
+
+        sleep_objects_sorted = Sleep.objects.all().order_by('sleep_time')
+        for sleep in sleep_objects_sorted:
+            sleep_time_list.append(sleep.sleep_time)
+
+            closest_weather = get_closest_station(sleep, Weather)
+            if closest_weather:
+                temp_c_list.append(closest_weather.temp_c)
+            else:
+                temp_c_list.append(None)
+
+        fig = px.line(x=sleep_time_list, y=temp_c_list)
+        fig.update_layout(**TempCStrategy.layout)
+        add_mean_line_to_chart(temp_c_list, fig)
+        chart = fig.to_html()
+        return chart
+
+
+class ConditionTextStrategy(VisualizeStrategy):
+    layout = {
+        "title": "Condition Text Visualization"
+    }
+
+    def get_chart() -> str:
+        condition_text_list = []
+
+        for sleep in Sleep.objects.all():
+            closest_weather = get_closest_station(sleep, Weather)
+            if closest_weather:
+                condition_text_list.append(closest_weather.condition_text)
+
+        unique_text, text_count = np.unique(condition_text_list, return_counts=True)
+
+        fig = px.pie(values=text_count, names=unique_text)
+        fig.update_layout(**ConditionTextStrategy.layout)
+        chart = fig.to_html()
+        return chart
+
+
+class PrecipMMStrategy(VisualizeStrategy):
+    layout = {
+        "title": "Average Precipitation Visualization",
+        "xaxis_title": "Time",
+        "yaxis_title": "Precipitation (mm.)",
+    }
+
+    def get_chart() -> str:
+        precip_mm_list = []
+        sleep_time_list = []
+
+        sleep_objects_sorted = Sleep.objects.all().order_by('sleep_time')
+        for sleep in sleep_objects_sorted:
+            sleep_time_list.append(sleep.sleep_time)
+
+            closest_weather = get_closest_station(sleep, Weather)
+            if closest_weather:
+                precip_mm_list.append(closest_weather.precip_mm)
+            else:
+                precip_mm_list.append(None)
+
+        fig = px.line(x=sleep_time_list, y=precip_mm_list)
+        fig.update_layout(**PrecipMMStrategy.layout)
+        add_mean_line_to_chart(precip_mm_list, fig)
+        chart = fig.to_html()
+        return chart
+
+
+
+class HumidityStrategy(VisualizeStrategy):
+    layout = {
+        "title": "Average Humidity Visualization",
+        "xaxis_title": "Time",
+        "yaxis_title": "Humidity (%)",
+    }
+
+    def get_chart() -> str:
+        humidity_list = []
+        sleep_time_list = []
+
+        sleep_objects_sorted = Sleep.objects.all().order_by('sleep_time')
+        for sleep in sleep_objects_sorted:
+            sleep_time_list.append(sleep.sleep_time)
+
+            closest_weather = get_closest_station(sleep, Weather)
+            # closest_noise_station = get_closest_station(sleep, Noise)
+            if closest_weather:
+                humidity_list.append(closest_weather.humidity)
+            else:
+                humidity_list.append(None)
+
+        fig = px.line(x=sleep_time_list, y=humidity_list)
+        fig.update_layout(**HumidityStrategy.layout)
+        add_mean_line_to_chart(humidity_list, fig)
+        chart = fig.to_html()
+        return chart
+
+
+
+class NoiseStrategy(VisualizeStrategy):
+    layout = {
+        "title": "Average Noise Visualization",
+        "xaxis_title": "Time",
+        "yaxis_title": "Noise (dB)",
+    }
+
+    def get_chart() -> str:
+        noise_list = []
+        sleep_time_list = []
+
+        sleep_objects_sorted = Sleep.objects.all().order_by('sleep_time')
+        for sleep in sleep_objects_sorted:
+            sleep_time_list.append(sleep.sleep_time)
+
+            closest_noise = get_closest_station(sleep, Noise)
+            # closest_noise_station = get_closest_station(sleep, Noise)
+            if closest_noise:
+                noise_list.append(closest_noise.noise)
+            else:
+                noise_list.append(None)
+
+        fig = px.line(x=sleep_time_list, y=noise_list)
+        fig.update_layout(**NoiseStrategy.layout)
+        add_mean_line_to_chart(noise_list, fig)
         chart = fig.to_html()
         return chart
 

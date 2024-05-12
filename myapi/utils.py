@@ -1,3 +1,4 @@
+from django.db.models.base import Model
 import numpy as np
 
 from datetime import timedelta
@@ -9,8 +10,8 @@ from django.db.models import Avg
 from myapi.analytics import analyze_opinions
 
 
-def get_closest_station(sleep: Sleep, stations: models.Model):
-    closest = None
+def get_closest_station(sleep: Sleep, stations: models.Model) -> None | Model:
+    closest_station = None
     closest_dist = float('inf')
     max_time_difference = timedelta(hours=12)
 
@@ -22,10 +23,10 @@ def get_closest_station(sleep: Sleep, stations: models.Model):
 
         if distance <= 5 and within_time_limit:
             if distance < closest_dist:
-                closest = station
+                closest_station = station
                 closest_dist = distance
 
-    return closest
+    return closest_station
 
 
 def get_sleep_within_range(lat, lon, range_km):
@@ -50,6 +51,9 @@ def get_environments(sleeps):
                             sleeps]
     closest_noise_station_list = [get_closest_station(sleep, Noise) for sleep in
                                   sleeps]
+
+    # print(f"Closer Weater: {closest_weather_list}")
+    # print(f"Closer Noise: {closest_noise_station_list}")
 
     avg_temp_c = get_average(closest_weather_list, "temp_c")
     avg_precip_mm = get_average(closest_weather_list, "precip_mm")

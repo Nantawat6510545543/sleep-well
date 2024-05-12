@@ -72,7 +72,7 @@ If you prefer a manual setup, follow the steps outlined in [manual.md](installat
       
       The date can be specified using query parameters `day`, `month`, or `year`.
 
-      For example, `/info/sleep?day=10&month=5?year=2024` would retrieve sleep entries for May 10, 2024.
+      For example, `/info/sleep?day=10&month=5&year=2024` would retrieve sleep entries for May 10, 2024.
       And `/info/sleep?month=5` would retrieve sleep entries for the month of May.
 
 2. **Get Sleep Information by ID**

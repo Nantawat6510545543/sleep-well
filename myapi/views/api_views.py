@@ -99,36 +99,6 @@ class SleepInfoByLocationView(generics.ListAPIView):
         return sleeps
 
 
-class SleepInfoByDateView(generics.ListAPIView):
-    """
-    Returns sleep information for all sleep entries that occurred on a specific date, including data about the closest environment for each sleep entry.
-    """
-    serializer_class = SleepInfoSerializer
-
-    def get_queryset(self):
-        sleeps = Sleep.objects.all()
-        filters = Q()
-
-        if "day" in self.request.GET:
-            day = self.request.GET.get('day')
-            filters &= Q(sleep_time__day=day)
-
-        if "month" in self.request.GET:
-            month = self.request.GET.get('month')
-            filters &= Q(sleep_time__month=month)
-
-        if "year" in self.request.GET:
-            year = self.request.GET.get('year')
-            filters &= Q(sleep_time__year=year)
-
-        sleeps = sleeps.filter(filters)
-
-        for sleep in sleeps:
-            sleep.closest_weather = get_closest_station(sleep, Weather)
-            sleep.closest_noise_station = get_closest_station(sleep, Noise)
-        return sleeps
-
-
 class SleepInfoAnalyticsView(generics.ListAPIView):
     """
     Returns analytics data for sleep information, including average sleep scores,
