@@ -28,6 +28,7 @@ class AgeView(BaseVisualizeView):
 class HeightView(BaseVisualizeView):
     strategy_class = HeightStrategy
 
+
 class WeightView(BaseVisualizeView):
     strategy_class = WeightStrategy
 
@@ -35,20 +36,26 @@ class WeightView(BaseVisualizeView):
 class SleepAnalyticsView(BaseVisualizeView):
     strategy_class = SleepAnalyticsStrategy
 
+
 class TempCView(BaseVisualizeView):
     strategy_class = TempCStrategy
+
 
 class ConditionTextView(BaseVisualizeView):
     strategy_class = ConditionTextStrategy
 
+
 class PrecipMMView(BaseVisualizeView):
     strategy_class = PrecipMMStrategy
+
 
 class HumidityView(BaseVisualizeView):
     strategy_class = HumidityStrategy
 
+
 class NoiseView(BaseVisualizeView):
     strategy_class = NoiseStrategy
+
 
 class SleepDurationVSSleepScoreView(BaseVisualizeView):
     strategy_class = SleepDurationVSSleepScoreStrategy
