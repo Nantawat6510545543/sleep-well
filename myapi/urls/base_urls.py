@@ -7,5 +7,5 @@ urlpatterns = [
     path('', views.index, name='index'),
     path('info/', include(info_patterns)),
     path('visualize/', include(visualize_patterns)),
-    path('perdict/', views.model_view, name='model'),
+    path('predict/', views.model_view, name='model'),
 ]

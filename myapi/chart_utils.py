@@ -42,13 +42,12 @@ class GenderStrategy(VisualizeStrategy):
         "title": "Gender Visualization"
     }
 
-    # TODO fix hardcode
     def get_chart() -> str:
-        gender_list = ["Male", "Female", "Other"]
-        gender_count_list = [Person.objects.filter(sex=each_gender).count() for each_gender in gender_list]
-        fig = px.pie(values=gender_count_list, names=gender_list)
-        fig.update_layout(**GenderStrategy.layout)
+        gender_list = Person.objects.values_list('sex', flat=True)
+        unique_gender, gender_count = np.unique(gender_list, return_counts=True)
 
+        fig = px.pie(values=gender_count, names=unique_gender)
+        fig.update_layout(**GenderStrategy.layout)
         chart = fig.to_html()
         return chart
 
@@ -200,7 +199,6 @@ class PrecipMMStrategy(VisualizeStrategy):
         return chart
 
 
-
 class HumidityStrategy(VisualizeStrategy):
     layout = {
         "title": "Average Humidity Visualization",
@@ -273,12 +271,11 @@ class SleepDurationVSSleepScoreStrategy(VisualizeStrategy):
         sleep_score_list = sleep_objects.values_list('sleep_score', flat=True)
         fig = px.scatter(x=sleep_duration_list, y=sleep_score_list)
         fig.update_layout(**SleepDurationVSSleepScoreStrategy.layout)
-        fig.update_traces(name=f"Sleep  Data", showlegend=True)
+        fig.update_traces(name=f"Sleep Data", showlegend=True)
         chart = fig.to_html()
         return chart
 
 
-# TODO refactor
 # interface for type hinting/ forcing implementation
 class VisualizeByPersonStrategy(ABC):
     @abstractmethod
