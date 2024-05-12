@@ -29,6 +29,10 @@ class PersonInfoSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class SleepTrainSerializer(SleepInfoSerializer):
+    person = PersonInfoSerializer()
+
+
 class SentimentAnalyticsSerializer(serializers.Serializer):
     total_comments = serializers.IntegerField()
     positive_percentage = serializers.FloatField()

@@ -1,9 +1,13 @@
+import json
+
 from django.shortcuts import redirect, render
+from rest_framework.renderers import JSONRenderer
 
 from myapi.predict import svm
-from myapi.models import Person
-from myapi.utils import get_analytics_data
+from myapi.models import Sleep, Weather, Noise, Person
+from myapi.utils import get_closest_station
 from myapi.views.api_views import PersonInfoListView, SleepInfoListView
+from myapi.serializers import SleepTrainSerializer
 
 
 def index(request):
@@ -15,23 +19,22 @@ def get_visualize_list_view(request):
 
 
 def model_view(request):
-    people_data = []
-    for person in Person.objects.all():
-        analytics_data = get_analytics_data(person.person_id)
-        person_data = {
-            "person": {
-                "person_id": person.person_id,
-                "sex": person.sex,
-                "age": person.age,
-                "height": person.height,
-                "weight": person.weight
-            },
-            "average_score": analytics_data["average_score"],
-            "opinion_analytics": analytics_data["opinion_analytics"],
-            "environment": analytics_data["environment"]
-        }
-        people_data.append(person_data)
-    args = {'context': svm(people_data)}
+    sleeps = Sleep.objects.all()
+    for sleep in sleeps:
+        sleep.person = Person.objects.get(person_id=sleep.person_id)
+        sleep.closest_weather = get_closest_station(sleep, Weather)
+        sleep.closest_noise_station = get_closest_station(sleep, Noise)
+
+    # Instantiate the serializer with your queryset
+    serializer = SleepTrainSerializer(sleeps, many=True)
+
+    # Serialize the queryset into JSON format
+    json_data = JSONRenderer().render(serializer.data)
+
+    # If needed, decode the JSON data to a Python dictionary
+    decoded_data = json.loads(json_data)
+
+    args = {'context': svm(decoded_data)}
     return render(request, 'myapi/model_view.html', args)
 
 

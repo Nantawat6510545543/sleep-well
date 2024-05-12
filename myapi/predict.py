@@ -3,8 +3,10 @@ import pandas as pd
 from sklearn.impute import SimpleImputer
 from sklearn.svm import SVR
 from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import StandardScaler
+from sklearn.preprocessing import StandardScaler, LabelEncoder
 from sklearn.metrics import mean_squared_error, r2_score, mean_absolute_error
+
+from myapi.analytics import get_sentiment
 
 
 def svm_preprocessing(data):
@@ -13,39 +15,37 @@ def svm_preprocessing(data):
         flat_entry = {}
         flat_entry.update(entry["person"])
 
-        if entry["opinion_analytics"] is not None:
-            flat_entry["average_sentiment"] = entry["opinion_analytics"]["average_sentiment"]
+        if entry["closest_weather"] is not None:
+            flat_entry.update(entry["closest_weather"])
         else:
-            # Fill missing opinion_analytics data with default values or impute them
             flat_entry.update({
-                "average_sentiment": 0
+                "temp_c": 0,
+                "precip_mm": 0,
+                "humidity": 0,
+                "noise": 0
             })
 
-        if entry["environment"] is not None:
-            flat_entry.update(entry["environment"])
+        if entry["closest_noise_station"] is not None:
+            flat_entry.update(entry["closest_noise_station"])
         else:
-            # Fill missing environment data with default values or impute them
             flat_entry.update({
-                "avg_temp_c": 0,
-                "avg_precip_mm": 0,
-                "avg_humidity": 0,
-                "avg_noise": 0
+                "Noise": 0
             })
+        flat_entry["sleep_duration"] = entry["sleep_duration"]
+        flat_entry["sleep_comment"] = get_sentiment(entry["sleep_comment"])
+        flat_entry["sleep_score"] = entry["sleep_score"]
 
-        flat_entry["average_score"] = entry["average_score"]
         flatten_data.append(flat_entry)
 
-    # Convert to DataFrame
     df = pd.DataFrame(flatten_data)
-    df = df[df['average_score'].notna()]
-
     df['sex'] = df['sex'].map({'Male': 0, 'Female': 1})
+    df['condition_text'] = LabelEncoder().fit_transform(df['condition_text'])
 
     imputer = SimpleImputer(strategy='mean')
-    X_imputed = imputer.fit_transform(df.drop(columns=['average_score']))
+    X_imputed = imputer.fit_transform(df.drop(columns=['sleep_score']))
 
     X = pd.DataFrame(X_imputed, columns=df.columns[:-1])
-    y = df['average_score']
+    y = df['sleep_score']
 
     return X, y
 
@@ -53,7 +53,7 @@ def svm_preprocessing(data):
 def svm(data):
     X, y = svm_preprocessing(data)
 
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.5, random_state=42)
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
     # Standardize features
     scaler = StandardScaler()
