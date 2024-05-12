@@ -87,7 +87,7 @@ class TestAPI(BaseTest):
 
     def test_get_sleep_info_by_location(self):
         """Test retrieving sleep information by location."""
-        # Construct the URL for retrieving sleep info by location within specified range (10 km)
+        # Construct the URL for retrieving sleep info by location within specified range (10000 km)
         url_specified_range = reverse('sleep-info-location-within-range',
                                       kwargs={'lat': 0.03, 'lon': 0.03, 'km': 10000})
         response_specified_range = self.client.get(url_specified_range)

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Model View</title>
+</head>
+<body>
+    <h1>Support Vector Machine Model</h1>
+    <h2>Model Summary</h2>
+    <p>{{ model }}</p>
+
+    <h2>Accuracy</h2>
+    <p>{{ accuracy }}</p>
+
+    <h2>Confusion Matrix</h2>
+    <table border="1">
+        <tr>
+            <th></th>
+            <th>Predicted Negative</th>
+            <th>Predicted Positive</th>
+        </tr>
+        <tr>
+            <th>Actual Negative</th>
+            <td>{{ conflict_matrix.0.0 }}</td>
+            <td>{{ conflict_matrix.0.1 }}</td>
+        </tr>
+        <tr>
+            <th>Actual Positive</th>
+            <td>{{ conflict_matrix.1.0 }}</td>
+            <td>{{ conflict_matrix.1.1 }}</td>
+        </tr>
+    </table>
+</body>
+</html>

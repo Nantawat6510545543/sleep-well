@@ -3,7 +3,6 @@ import numpy as np
 
 from datetime import timedelta
 from geopy.distance import geodesic
-from textblob import TextBlob
 
 from myapi.models import *
 from django.db.models import Avg

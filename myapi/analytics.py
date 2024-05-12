@@ -9,7 +9,7 @@ nltk.download('stopwords')
 nltk.download('wordnet')
 
 
-def preprocessing(comment):
+def comment_preprocessing(comment):
     # Tokenize the comment
     tokens = word_tokenize(comment.lower())  # Convert to lowercase
 
@@ -40,7 +40,7 @@ def analyze_opinions(comments_list):
 
     for comment in comments_list:
         # Preprocess each comment before sentiment analysis
-        preprocessed_comment = preprocessing(comment)
+        preprocessed_comment = comment_preprocessing(comment)
 
         # Perform sentiment analysis using TextBlob
         sentiment_score = get_sentiment(preprocessed_comment)
@@ -77,6 +77,6 @@ def analyze_opinions(comments_list):
 
 
 def get_sentiment(comment):
-    preprocessed_comment = preprocessing(comment)
+    preprocessed_comment = comment_preprocessing(comment)
     sentiments = TextBlob(preprocessed_comment).sentiment.polarity
     return sentiments

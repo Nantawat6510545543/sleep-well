@@ -1,7 +1,6 @@
 from django.urls import path
 
-from myapi.views.app_views import get_visualize_list_view, get_sleep_visualize_view
-from myapi.views.visualize_views import *
+from myapi.views import *
 
 visualize_patterns = [
     path('', get_visualize_list_view, name='visualize-list-view'),
