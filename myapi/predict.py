@@ -1,8 +1,10 @@
+import numpy as np
 import pandas as pd
+from sklearn.impute import SimpleImputer
 from sklearn.svm import SVR
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
-from sklearn.metrics import accuracy_score, confusion_matrix
+from sklearn.metrics import mean_squared_error, r2_score, mean_absolute_error
 
 
 def svm_preprocessing(data):
@@ -10,18 +12,39 @@ def svm_preprocessing(data):
     for entry in data:
         flat_entry = {}
         flat_entry.update(entry["person"])
-        flat_entry["average_sentiment"] = entry["opinion_analytics"]["average_sentiment"]
-        flat_entry.update(entry["environment"])
+
+        if entry["opinion_analytics"] is not None:
+            flat_entry["average_sentiment"] = entry["opinion_analytics"]["average_sentiment"]
+        else:
+            # Fill missing opinion_analytics data with default values or impute them
+            flat_entry.update({
+                "average_sentiment": 0
+            })
+
+        if entry["environment"] is not None:
+            flat_entry.update(entry["environment"])
+        else:
+            # Fill missing environment data with default values or impute them
+            flat_entry.update({
+                "avg_temp_c": 0,
+                "avg_precip_mm": 0,
+                "avg_humidity": 0,
+                "avg_noise": 0
+            })
+
         flat_entry["average_score"] = entry["average_score"]
         flatten_data.append(flat_entry)
 
     # Convert to DataFrame
     df = pd.DataFrame(flatten_data)
+    df = df[df['average_score'].notna()]
 
     df['sex'] = df['sex'].map({'Male': 0, 'Female': 1})
 
-    # Split into features and target variable
-    X = df.drop(columns=['person_id', 'average_score'])
+    imputer = SimpleImputer(strategy='mean')
+    X_imputed = imputer.fit_transform(df.drop(columns=['average_score']))
+
+    X = pd.DataFrame(X_imputed, columns=df.columns[:-1])
     y = df['average_score']
 
     return X, y
@@ -30,7 +53,7 @@ def svm_preprocessing(data):
 def svm(data):
     X, y = svm_preprocessing(data)
 
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.5, random_state=42)
 
     # Standardize features
     scaler = StandardScaler()
@@ -43,11 +66,24 @@ def svm(data):
 
     # Make predictions
     y_pred = svm_model.predict(X_test_scaled)
+    y_test = np.array(y_test)
 
-    # Calculate accuracy
-    acc = accuracy_score(y_test, y_pred)
+    mse = mean_squared_error(y_test, y_pred)
+    r2 = r2_score(y_test, y_pred)
+    mae = mean_absolute_error(y_test, y_pred)
 
-    # Generate confusion matrix
-    matrix = confusion_matrix(y_test, y_pred)
+    model_summary = {
+        'kernel': svm_model.kernel,
+        'C': svm_model.C,
+        'epsilon': svm_model.epsilon,
+        'gamma': svm_model.gamma,
+        'coef0': svm_model.coef0
+    }
 
-    return svm_model, acc, matrix
+    return {
+        'model': svm_model,
+        'Summary': model_summary,
+        'MSE': mse,
+        'R2': r2,
+        'MAE': mae
+    }

@@ -15,14 +15,24 @@ def get_visualize_list_view(request):
 
 
 def model_view(request):
-    data = [get_analytics_data(person.person_id) for person in Person.objects.all()]
-    model, accuracy, matrix = svm(data)
-    context = {
-        "model": model,
-        "conflict matrix": matrix,
-        "accuracy": accuracy
-    }
-    return render(request, 'myapi/model_view.html',context)
+    people_data = []
+    for person in Person.objects.all():
+        analytics_data = get_analytics_data(person.person_id)
+        person_data = {
+            "person": {
+                "person_id": person.person_id,
+                "sex": person.sex,
+                "age": person.age,
+                "height": person.height,
+                "weight": person.weight
+            },
+            "average_score": analytics_data["average_score"],
+            "opinion_analytics": analytics_data["opinion_analytics"],
+            "environment": analytics_data["environment"]
+        }
+        people_data.append(person_data)
+    args = {'context': svm(people_data)}
+    return render(request, 'myapi/model_view.html', args)
 
 
 # Fix for query parameters (?person_id=)
