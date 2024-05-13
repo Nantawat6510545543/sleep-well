@@ -1,7 +1,6 @@
 from .tests_base import BaseTest
 from django.urls import reverse
-from django.http import HttpRequest, HttpResponse
-from myapi.views import get_person_info_list_view, get_sleep_info_list_view
+from django.http import HttpResponse
 
 
 class TestViews(BaseTest):
@@ -19,6 +18,9 @@ class TestViews(BaseTest):
         response = self.client.get(reverse("person-info-list") + "?person_id=1")
         self.assertRedirects(response, reverse("person-info-id", kwargs={"person_id": 1}))
 
+        response = self.client.get(reverse("person-info-list") + "1")
+        self.assertEqual(response.url, reverse("person-info-id", kwargs={"person_id": 1}))
+
     def test_get_person_info_list_view_without_person_id(self):
         response = self.client.get(reverse("person-info-list"))
         self.assertEqual(response.status_code, 200)
@@ -27,6 +29,9 @@ class TestViews(BaseTest):
     def test_get_sleep_info_list_view_with_sleep_id(self):
         response = self.client.get(reverse("sleep-info-list") + "?sleep_id=1")
         self.assertRedirects(response, reverse("sleep-info-id", kwargs={"sleep_id": 1}))
+
+        response = self.client.get(reverse("sleep-info-list") + "1")
+        self.assertEqual(response.url, reverse("sleep-info-id", kwargs={"sleep_id": 1}))
 
     def test_get_sleep_info_list_view_without_sleep_id(self):
         response = self.client.get(reverse("sleep-info-list"))
