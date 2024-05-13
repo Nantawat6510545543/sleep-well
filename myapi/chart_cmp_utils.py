@@ -23,7 +23,6 @@ class SleepDurationVSSleepScoreStrategy(VisualizeStrategy):
         sleep_score_list = sleep_objects.values_list('sleep_score', flat=True)
         fig = px.scatter(x=sleep_duration_list, y=sleep_score_list, **TRENDLINE_CONFIG)
         fig.update_layout(**SleepDurationVSSleepScoreStrategy.layout)
-        fig.update_traces(name=f"Sleep Data", showlegend=True)
         chart = fig.to_html()
         return chart
 

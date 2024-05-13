@@ -61,26 +61,34 @@ class NoiseView(BaseVisualizeView):
 class SleepDurationVSSleepScoreView(BaseVisualizeView):
     strategy_class = SleepDurationVSSleepScoreStrategy
 
+
 class SleepDurationVSTempCView(BaseVisualizeView):
     strategy_class = SleepDurationVSTempCStrategy
+
 
 class SleepDurationVSPrecipMMView(BaseVisualizeView):
     strategy_class = SleepDurationVSPrecipMMStrategy
 
+
 class SleepDurationVSNoiseView(BaseVisualizeView):
     strategy_class = SleepDurationVSNoiseStrategy
+
 
 class SleepDurationVSHumidityView(BaseVisualizeView):
     strategy_class = SleepDurationVSHumidityStrategy
 
+
 class SleepScoreVSTempCView(BaseVisualizeView):
     strategy_class = SleepScoreVSTempCStrategy
+
 
 class SleepScoreVSPrecipMMView(BaseVisualizeView):
     strategy_class = SleepScoreVSPrecipMMStrategy
 
+
 class SleepScoreVSHumidityView(BaseVisualizeView):
     strategy_class = SleepScoreVSHumidityStrategy
+
 
 class SleepScoreVSNoiseView(BaseVisualizeView):
     strategy_class = SleepScoreVSNoiseStrategy

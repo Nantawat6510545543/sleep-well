@@ -50,7 +50,7 @@ class TestFactory:
 class BaseTest(TestCase):
     def setUp(self):
         factory = TestFactory()
-        # A very closet to station
+        # A very close to station
         self.personA = factory.create_person('Male', 30, 175.0, 70.0)
         self.sleepA1 = factory.create_sleep(self.personA, 0, 12, 90, 0, 0)
         self.sleepA2 = factory.create_sleep(self.personA, 1, 9, 50, 0, 0)
