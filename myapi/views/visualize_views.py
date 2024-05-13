@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.views.generic import TemplateView
 
 from myapi.chart_utils import *
+from myapi.chart_cmp_utils import *
 
 
 class BaseVisualizeView(TemplateView):
