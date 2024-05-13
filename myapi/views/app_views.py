@@ -3,7 +3,7 @@ import json
 from django.shortcuts import redirect, render
 from rest_framework.renderers import JSONRenderer
 
-from myapi.predict import svm
+from myapi.predict import linear
 from myapi.models import Sleep, Weather, Noise, Person
 from myapi.utils import get_closest_station
 from myapi.views.api_views import PersonInfoListView, SleepInfoListView
@@ -25,16 +25,11 @@ def model_view(request):
         sleep.closest_weather = get_closest_station(sleep, Weather)
         sleep.closest_noise_station = get_closest_station(sleep, Noise)
 
-    # Instantiate the serializer with your queryset
     serializer = SleepTrainSerializer(sleeps, many=True)
-
-    # Serialize the queryset into JSON format
     json_data = JSONRenderer().render(serializer.data)
-
-    # If needed, decode the JSON data to a Python dictionary
     decoded_data = json.loads(json_data)
 
-    args = {'context': svm(decoded_data)}
+    args = {'context': linear(decoded_data)}
     return render(request, 'myapi/model_view.html', args)
 
 
