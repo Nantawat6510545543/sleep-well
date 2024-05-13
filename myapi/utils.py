@@ -51,9 +51,6 @@ def get_environments(sleeps):
     closest_noise_station_list = [get_closest_station(sleep, Noise) for sleep in
                                   sleeps]
 
-    # print(f"Closer Weater: {closest_weather_list}")
-    # print(f"Closer Noise: {closest_noise_station_list}")
-
     avg_temp_c = get_average(closest_weather_list, "temp_c")
     avg_precip_mm = get_average(closest_weather_list, "precip_mm")
     avg_humidity = get_average(closest_weather_list, "humidity")
