@@ -39,3 +39,4 @@ pycparser~=2.21
 inflection~=0.5.1
 pytz~=2024.1
 wsproto~=1.2.0
+statsmodels
